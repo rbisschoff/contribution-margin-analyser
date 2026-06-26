@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contribution Margin Analyser — Operator Series</title>
+  <meta name="description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs. Build cost transparency. Part of the Operator Series.">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Contribution Margin Analyser — Operator Series">
+  <meta property="og:description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs.">
+  <meta property="og:type" content="website">
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPJ7VKS451"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JPJ7VKS451');
+  </script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    /* ============================================================
+       OPERATOR SERIES BRANDING
+       ============================================================ */
+    :root {
+      --accent: #1B4F72;
+      --accent-dark: #0a2a3d;
+      --accent-light: #D6EAF8;
+      --alert: #C0392B;
+      --positive: #1E8449;
+      --warning: #F39C12;
+      
+      --ink: #0A0A0F;
+      --ink2: #2C2C3A;
+      --muted: #7A7A8C;
+      --muted2: #ADADBE;
+      
+      --bg: #F2F2F7;
+      --card: #FFFFFF;
+      --card2: #F9F9FB;
+      --border: #E5E5EA;
+      --border-light: #F0F0F4;
+      
+      --portfolio: #5D6D7E;
+      --unit: #1B4F72;
+      
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 10px;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 28px rgba(0,0,0,0.09);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --section-gap: 40px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, 'Inter', BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    header {
+      background: rgba(8,8,14,0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .brand-text {
+      color: white;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--muted2);
+      margin-top: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.28);
+    }
+
+    .btn-ghost:focus-visible {
+      outline: 2px solid rgba(255,255,255,0.6);
+      outline-offset: 2px;
+    }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 56px;
+    }
+
+    .intro {
+      margin-bottom: var(--section-gap);
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    .intro h1 {
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .intro p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       VIEW TOGGLE
+       ============================================================ */
+    .view-toggle {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+      gap: 4px;
+      background: white;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      max-width: 320px;
+      margin: 0 auto 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ============================================================
+       COMPARISON GRID — paired side-by-side
+       ============================================================ */
+    .comparison-wrapper {
+      margin-bottom: var(--section-gap);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .comparison-bridge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 0;
+      position: relative;
+    }
+
+    .comparison-bridge::before {
+      content: '';
+      position: absolute;
+      top: 8%;
+      bottom: 8%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--border) 12%, var(--border) 88%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .comparison-bridge-label {
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 8px 4px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 900px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .comparison-bridge {
+        display: none;
+      }
+
+      .card-portfolio {
+        order: 1;
+      }
+
+      .card-unit {
+        order: 2;
+      }
+
+      .comparison-wrapper::after {
+        content: '';
+        display: block;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border), transparent);
+        margin: 4px 0 0;
+      }
+    }
+
+    /* ============================================================
+       CARDS
+       ============================================================ */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+    }
+
+    .card-portfolio {
+      border-top: none;
+      position: relative;
+      background: linear-gradient(180deg, #FAFAFC 0%, var(--card) 100%);
+      opacity: 0.97;
+    }
+
+    .card-portfolio::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: linear-gradient(90deg, #7F8C8D 0%, var(--portfolio) 50%, #7F8C8D 100%);
+    }
+
+    .card-unit {
+      border-top: none;
+      position: relative;
+      box-shadow: var(--shadow-md);
+      border-color: rgba(27, 79, 114, 0.18);
+    }
+
+    .card-unit::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: linear-gradient(90deg, var(--accent-dark) 0%, var(--accent) 40%, #5DADE2 100%);
+    }
+
+    .card-unit:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 900px) {
+      .card-unit {
+        box-shadow: var(--shadow-md);
+        border-width: 1.5px;
+      }
+
+      .card-portfolio {
+        border-bottom: 3px solid var(--border-light);
+        padding-bottom: 32px;
+      }
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .card-badge.portfolio {
+      background: var(--border-light);
+      color: var(--portfolio);
+    }
+
+    .card-badge.unit {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .card-icon {
+      font-size: 20px;
+    }
+
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label-accent {
+      width: 3px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       INPUTS
+       ============================================================ */
+    .input-group {
+      margin-bottom: 12px;
+    }
+
+    .input-group-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink2);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .info-tip {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: help;
+      position: relative;
+      border: 1px solid rgba(27, 79, 114, 0.15);
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .info-tip:hover,
+    .info-tip:focus-visible,
+    .info-tip.active {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .info-tip:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .info-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: var(--ink);
+      color: white;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 400;
+      white-space: normal;
+      width: min(260px, 70vw);
+      z-index: 50;
+      line-height: 1.45;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    }
+
+    .info-tip::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--ink);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      z-index: 51;
+    }
+
+    @media (hover: hover) {
+      .info-tip:hover::after,
+      .info-tip:hover::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .info-tip.active::after,
+    .info-tip.active::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 13px;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 13px;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px 12px 10px 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    input[type="number"]:hover, select:hover {
+      border-color: rgba(27, 79, 114, 0.25);
+      background: #FAFCFE;
+    }
+
+    input.no-prefix, select.no-prefix {
+      padding-left: 12px;
+    }
+
+    input.with-suffix {
+      padding-right: 32px;
+    }
+
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.12);
+      background: white;
+    }
+
+    input[type="number"]:focus-visible, select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    /* ============================================================
+       OPTIONAL COSTS (HIDDEN COSTS SECTION)
+       ============================================================ */
+    .hidden-costs-toggle {
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .hidden-costs-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(214, 234, 248, 0.35);
+    }
+
+    .hidden-costs-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .hidden-costs-content {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .hidden-costs-content.open {
+      display: block;
+    }
+
+    .hidden-cost-note {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       RESULT HIGHLIGHT
+       ============================================================ */
+    .result-highlight {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      padding: 24px 20px;
+      border-radius: var(--radius-md);
+      margin-top: 24px;
+      text-align: center;
+      transition: transform 0.35s var(--ease-out);
+    }
+
+    .result-highlight.portfolio {
+      background: linear-gradient(135deg, #6B7B8C 0%, #4A5568 55%, #3D4A57 100%);
+    }
+
+    .result-highlight.pulse {
+      animation: resultPulse 0.45s var(--ease-out);
+    }
+
+    @keyframes resultPulse {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.015); }
+      100% { transform: scale(1); }
+    }
+
+    .result-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+
+    .result-value {
+      font-size: clamp(28px, 5vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+      transition: opacity 0.15s;
+    }
+
+    .result-value.animating {
+      opacity: 0.7;
+    }
+
+    .result-secondary {
+      font-size: 13px;
+      opacity: 0.88;
+      font-weight: 500;
+    }
+
+    .result-toggle {
+      margin-top: 12px;
+      font-size: 11px;
+      opacity: 0.75;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      background: none;
+      border: none;
+      color: inherit;
+      font-family: inherit;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .result-toggle:hover {
+      opacity: 1;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .result-toggle:focus-visible {
+      outline: 2px solid rgba(255,255,255,0.6);
+      outline-offset: 2px;
+    }
+
+    /* ============================================================
+       INSIGHT BOX
+       ============================================================ */
+    .insight-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: var(--section-gap);
+    }
+
+    .insight-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gap-indicator {
+      background: var(--accent-light);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .gap-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .gap-text-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .gap-text-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .gap-text-detail {
+      font-size: 12px;
+      color: var(--ink2);
+      margin-top: 4px;
+    }
+
+    .insight-list {
+      list-style: none;
+    }
+
+    .insight-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .insight-list li:last-child {
+      border-bottom: none;
+    }
+
+    .insight-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .insight-icon.alert {
+      background: #FADBD8;
+      color: var(--alert);
+    }
+
+    .insight-icon.warning {
+      background: #FEF5E7;
+      color: var(--warning);
+    }
+
+    .insight-icon.positive {
+      background: #D5F5E3;
+      color: var(--positive);
+    }
+
+    .insight-icon.info {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       COST COMPOSITION CHARTS
+       ============================================================ */
+    .composition-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: var(--section-gap);
+    }
+
+    .composition-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .composition-card {
+      background: var(--card2, #F9F9FB);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border-light);
+    }
+
+    .composition-card.portfolio-card {
+      opacity: 0.95;
+    }
+
+    .composition-card.unit-card {
+      border-color: rgba(27, 79, 114, 0.15);
+      box-shadow: 0 2px 8px rgba(27, 79, 114, 0.06);
+    }
+
+    .composition-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .composition-chart-wrap {
+      position: relative;
+      height: 140px;
+      max-width: 200px;
+      margin: 0 auto 12px;
+    }
+
+    .composition-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--ink2);
+    }
+
+    .composition-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .composition-legend i {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+      .composition-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* ============================================================
+       BREAKDOWN COMPARISON
+       ============================================================ */
+    .breakdown-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: var(--section-gap);
+    }
+
+    .breakdown-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 480px;
+    }
+
+    .breakdown-table th {
+      text-align: left;
+      padding: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .breakdown-table th.numeric {
+      text-align: right;
+    }
+
+    .breakdown-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--ink2);
+    }
+
+    .breakdown-table td.numeric {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+
+    .breakdown-table tr.cost-row td:first-child::before {
+      content: '−';
+      color: var(--alert);
+      margin-right: 6px;
+      font-weight: 700;
+    }
+
+    .breakdown-table tr.revenue-row {
+      font-weight: 600;
+    }
+
+    .breakdown-table tr.margin-row {
+      background: var(--accent-light);
+      font-weight: 700;
+    }
+
+    .breakdown-table tr.margin-row td {
+      border-bottom: none;
+      color: var(--accent-dark);
+    }
+
+    .delta-positive {
+      color: var(--positive);
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .delta-negative {
+      color: var(--alert);
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    /* Mobile breakdown cards */
+    .breakdown-cards {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .breakdown-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .breakdown-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .breakdown-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 0.5px solid var(--border-light);
+      font-size: 13px;
+    }
+
+    .breakdown-card-row:last-child {
+      border-bottom: none;
+    }
+
+    .breakdown-card-row.is-margin {
+      background: var(--accent-light);
+      margin: 8px -14px -14px;
+      padding: 12px 14px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .breakdown-card-row .col-label {
+      color: var(--ink2);
+      flex: 1;
+      padding-right: 8px;
+    }
+
+    .breakdown-card-row .col-values {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .breakdown-card-row .col-values span {
+      display: block;
+    }
+
+    .breakdown-card-row .col-values .sub {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .breakdown-table-wrap {
+        display: none;
+      }
+
+      .breakdown-cards {
+        display: flex;
+      }
+    }
+
+    /* ============================================================
+       METHODOLOGY CTA PANEL
+       ============================================================ */
+    .methodology-cta {
+      background: linear-gradient(145deg, #0a2a3d 0%, var(--accent) 45%, #1a5276 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 48px 36px;
+      margin-bottom: var(--section-gap);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(27, 79, 114, 0.25);
+    }
+
+    .methodology-cta::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -5%;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .methodology-cta::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(93, 173, 226, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .methodology-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .methodology-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.7;
+      margin-bottom: 16px;
+    }
+
+    .methodology-title {
+      font-size: clamp(24px, 4.5vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin-bottom: 20px;
+      line-height: 1.15;
+      font-style: italic;
+    }
+
+    .methodology-text {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .methodology-text:last-of-type {
+      margin-bottom: 28px;
+    }
+
+    .methodology-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .methodology-cta .btn-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      color: var(--accent-dark);
+      border: none;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      transition: transform 0.2s var(--ease-out), box-shadow 0.2s;
+    }
+
+    .methodology-cta .btn-linkedin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      background: #F8FBFE;
+    }
+
+    .methodology-cta .btn-linkedin:focus-visible {
+      outline: 3px solid rgba(255,255,255,0.5);
+      outline-offset: 3px;
+    }
+
+    .methodology-cta .btn-linkedin svg {
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      max-width: 1400px;
+      margin: 48px auto 0;
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .framework-attribution {
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      background: var(--bg);
+      margin-top: 32px;
+    }
+
+    .attribution-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .attribution-text strong {
+      color: var(--ink2);
+      font-weight: 600;
+    }
+
+    .attribution-link {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .attribution-link:hover {
+      text-decoration: underline;
+    }
+
+    .attribution-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       ACTIONS
+       ============================================================ */
+    .action-bar {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--ink);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--bg);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
+    /* ============================================================
+       PRINT
+       ============================================================ */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+
+      body {
+        background: white;
+        font-size: 11pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      header {
+        position: static;
+        background: #08080E !important;
+        break-after: avoid;
+      }
+
+      .header-actions,
+      .action-bar,
+      .no-print,
+      .comparison-bridge,
+      .composition-section,
+      .info-tip::after,
+      .info-tip::before {
+        display: none !important;
+      }
+
+      main {
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .intro {
+        margin-bottom: 16px;
+        break-after: avoid;
+      }
+
+      .intro h1 {
+        font-size: 18pt;
+      }
+
+      .comparison-wrapper {
+        break-inside: avoid;
+        margin-bottom: 16px;
+      }
+
+      .comparison-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        padding: 14px;
+        break-inside: avoid;
+      }
+
+      .card-unit:hover {
+        box-shadow: none;
+      }
+
+      .hidden-costs-content.open {
+        display: block !important;
+      }
+
+      .result-highlight,
+      .result-highlight.portfolio {
+        background: #1B4F72 !important;
+        color: white !important;
+      }
+
+      .result-highlight.portfolio {
+        background: #5D6D7E !important;
+      }
+
+      .insight-section,
+      .breakdown-section {
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: 16px;
+        padding: 14px;
+      }
+
+      .breakdown-table-wrap {
+        display: block !important;
+      }
+
+      .breakdown-cards {
+        display: none !important;
+      }
+
+      .breakdown-table {
+        min-width: 0;
+        font-size: 9pt;
+      }
+
+      .methodology-cta {
+        background: #1B4F72 !important;
+        color: white !important;
+        break-before: page;
+        padding: 24px;
+        box-shadow: none;
+        margin-top: 12px;
+      }
+
+      .methodology-cta .btn-linkedin {
+        display: none;
+      }
+
+      footer {
+        margin-top: 16px;
+        padding: 12px 0;
+        font-size: 9pt;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">€</div>
+        <div class="brand-text">
+          <div class="brand-title">Contribution Margin Analyser</div>
+          <div class="brand-subtitle">Operator Series</div>
+        </div>
+      </div>
+      <div class="header-actions no-print">
+        <button class="btn-ghost" onclick="resetForm()" type="button">Reset</button>
+        <button class="btn-ghost" onclick="shareResult()" type="button">Share</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main>
+
+    <div class="intro">
+      <h1>Portfolio averages hide what unit-level analysis reveals.</h1>
+      <p>Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically — every month, across every unit you operate.</p>
+    </div>
+
+    <!-- ============================================================
+         COMPARISON GRID
+         ============================================================ -->
+    <div class="comparison-wrapper">
+    <div class="comparison-grid">
+
+      <!-- ============================================================
+           PORTFOLIO BIRDVIEW (LEFT)
+           ============================================================ -->
+      <div class="card card-portfolio">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-icon">🔭</span>
+            Portfolio Birdview
+          </div>
+          <span class="card-badge portfolio">Average</span>
+        </div>
+
+        <!-- Revenue -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent" style="background: var(--portfolio);"></span>
+            Revenue
+          </div>
+          
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_units">Units in portfolio</label>
+              <div class="input-wrapper">
+                <input type="number" id="p_units" value="20" min="1" step="1" class="no-prefix">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_revenue">Avg monthly revenue / unit</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_revenue" value="3500" min="0" step="50">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Owner Agreement -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent" style="background: var(--portfolio);"></span>
+            Owner Agreement
+          </div>
+          
+          <div class="input-group">
+            <label for="p_ownerType">
+              Most common agreement type
+              <span class="info-tip" data-tip="Revenue share: owner gets % of net revenue. Fixed rent: owner gets fixed monthly amount. Management fee: you keep the property revenue and pay owner a fee.">i</span>
+            </label>
+            <select id="p_ownerType" class="no-prefix" onchange="updateOwnerInput('p')">
+              <option value="revShare">Revenue share (%)</option>
+              <option value="fixedRent">Fixed monthly rent (€)</option>
+              <option value="mgmtFee">Management fee (% to operator)</option>
+            </select>
+          </div>
+
+          <div class="input-group" id="p_ownerValueGroup">
+            <label for="p_ownerValue">
+              <span id="p_ownerValueLabel">Owner share (%)</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix" id="p_ownerValuePrefix" style="display:none;">€</span>
+              <input type="number" id="p_ownerValue" value="70" min="0" step="1" class="no-prefix">
+              <span class="input-suffix" id="p_ownerValueSuffix">%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mandatory Costs -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent" style="background: var(--portfolio);"></span>
+            Direct Costs (monthly avg)
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_otaShare">
+                OTA share
+                <span class="info-tip" data-tip="% of bookings coming through OTAs (Booking.com, Airbnb, etc.)">i</span>
+              </label>
+              <div class="input-wrapper">
+                <input type="number" id="p_otaShare" value="60" min="0" max="100" step="1" class="no-prefix with-suffix">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_otaCommission">Avg OTA commission</label>
+              <div class="input-wrapper">
+                <input type="number" id="p_otaCommission" value="17" min="0" max="30" step="0.5" class="no-prefix with-suffix">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_cleaning">Cleaning / month</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_cleaning" value="180" min="0" step="10">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_taxes">Local taxes / month</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_taxes" value="120" min="0" step="10">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden Costs Toggle -->
+        <button class="hidden-costs-toggle" onclick="toggleHiddenCosts('p')" type="button" aria-expanded="false" aria-controls="p_hiddenContent" id="p_hiddenToggle">
+          <span>⊕ Hidden costs (optional)</span>
+          <span id="p_hiddenToggleIcon">▼</span>
+        </button>
+
+        <div class="hidden-costs-content" id="p_hiddenContent">
+          <div class="hidden-cost-note">
+            These are the costs most operators forget to track but quietly eat margin every month.
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_utilities">
+                Utilities allocation
+                <span class="info-tip" data-tip="Electricity, water, gas — particularly if included in guest stays.">i</span>
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_utilities" value="0" min="0" step="10">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_internet">Internet / cable</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_internet" value="0" min="0" step="5">
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_linen">
+                Linen / consumables
+                <span class="info-tip" data-tip="Towels, sheets, toiletries, coffee, etc. Often replaced more frequently than budgeted.">i</span>
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_linen" value="0" min="0" step="5">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_maintenance">Maintenance reserve</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_maintenance" value="0" min="0" step="10">
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_insurance">Insurance</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_insurance" value="0" min="0" step="5">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="p_localTeam">
+                Local team allocation
+                <span class="info-tip" data-tip="Cost of cleaning coordinator, maintenance staff, guest communications attributed per unit.">i</span>
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_localTeam" value="0" min="0" step="10">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Result -->
+        <div class="result-highlight portfolio">
+          <div class="result-label">Portfolio avg monthly margin</div>
+          <div class="result-value" id="p_marginValue">€ —</div>
+          <div class="result-secondary" id="p_marginDetail">— per unit / month</div>
+          <div class="result-toggle" onclick="toggleResultMode('p')" id="p_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('p')">Show as % of revenue</div>
+        </div>
+      </div>
+
+      <div class="comparison-bridge" aria-hidden="true">
+        <span class="comparison-bridge-label">vs</span>
+      </div>
+
+      <!-- ============================================================
+           SINGLE UNIT DEEP-DIVE (RIGHT)
+           ============================================================ -->
+      <div class="card card-unit">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-icon">🔬</span>
+            Single Unit Deep-Dive
+          </div>
+          <span class="card-badge unit">This unit</span>
+        </div>
+
+        <!-- Revenue -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent"></span>
+            Revenue
+          </div>
+          
+          <div class="input-group">
+            <label for="u_revenue">This unit's monthly revenue</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">€</span>
+              <input type="number" id="u_revenue" value="4200" min="0" step="50">
+            </div>
+          </div>
+        </div>
+
+        <!-- Owner Agreement -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent"></span>
+            Owner Agreement
+          </div>
+          
+          <div class="input-group">
+            <label for="u_ownerType">
+              This unit's agreement type
+              <span class="info-tip" data-tip="Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.">i</span>
+            </label>
+            <select id="u_ownerType" class="no-prefix" onchange="updateOwnerInput('u')">
+              <option value="revShare">Revenue share (%)</option>
+              <option value="fixedRent">Fixed monthly rent (€)</option>
+              <option value="mgmtFee">Management fee (% to operator)</option>
+            </select>
+          </div>
+
+          <div class="input-group" id="u_ownerValueGroup">
+            <label for="u_ownerValue">
+              <span id="u_ownerValueLabel">Owner share (%)</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix" id="u_ownerValuePrefix" style="display:none;">€</span>
+              <input type="number" id="u_ownerValue" value="75" min="0" step="1" class="no-prefix">
+              <span class="input-suffix" id="u_ownerValueSuffix">%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mandatory Costs -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent"></span>
+            Direct Costs (this unit, monthly)
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_otaShare">OTA share</label>
+              <div class="input-wrapper">
+                <input type="number" id="u_otaShare" value="70" min="0" max="100" step="1" class="no-prefix with-suffix">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="u_otaCommission">Avg OTA commission</label>
+              <div class="input-wrapper">
+                <input type="number" id="u_otaCommission" value="18" min="0" max="30" step="0.5" class="no-prefix with-suffix">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_cleaning">Cleaning / month</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_cleaning" value="220" min="0" step="10">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="u_taxes">Local taxes / month</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_taxes" value="140" min="0" step="10">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden Costs Toggle -->
+        <button class="hidden-costs-toggle" onclick="toggleHiddenCosts('u')" type="button" aria-expanded="false" aria-controls="u_hiddenContent" id="u_hiddenToggle">
+          <span>⊕ Hidden costs (optional)</span>
+          <span id="u_hiddenToggleIcon">▼</span>
+        </button>
+
+        <div class="hidden-costs-content" id="u_hiddenContent">
+          <div class="hidden-cost-note">
+            These are the costs most operators forget to track but quietly eat margin every month.
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_utilities">Utilities allocation</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_utilities" value="0" min="0" step="10">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="u_internet">Internet / cable</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_internet" value="0" min="0" step="5">
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_linen">Linen / consumables</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_linen" value="0" min="0" step="5">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="u_maintenance">Maintenance reserve</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_maintenance" value="0" min="0" step="10">
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_insurance">Insurance</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_insurance" value="0" min="0" step="5">
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="u_localTeam">Local team allocation</label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="u_localTeam" value="0" min="0" step="10">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unit Result -->
+        <div class="result-highlight">
+          <div class="result-label">This unit's monthly margin</div>
+          <div class="result-value" id="u_marginValue">€ —</div>
+          <div class="result-secondary" id="u_marginDetail">— for this unit / month</div>
+          <div class="result-toggle" onclick="toggleResultMode('u')" id="u_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('u')">Show as % of revenue</div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+    <!-- ============================================================
+         COST COMPOSITION — side by side
+         ============================================================ -->
+    <div class="composition-section">
+      <div class="insight-title">
+        <span style="color: var(--accent);">◎</span>
+        Cost Composition
+      </div>
+      <p class="sec-desc" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:4px;">Same revenue, different cost layers — this is what portfolio averages flatten out.</p>
+      <div class="composition-grid">
+        <div class="composition-card portfolio-card">
+          <div class="composition-card-title">Portfolio average</div>
+          <div class="composition-chart-wrap"><canvas id="chartPortfolio" aria-label="Portfolio cost composition chart"></canvas></div>
+          <div class="composition-legend" id="legendPortfolio"></div>
+        </div>
+        <div class="composition-card unit-card">
+          <div class="composition-card-title">This unit</div>
+          <div class="composition-chart-wrap"><canvas id="chartUnit" aria-label="Unit cost composition chart"></canvas></div>
+          <div class="composition-legend" id="legendUnit"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         WHY PER-UNIT VISIBILITY MATTERS
+         ============================================================ -->
+    <div class="insight-section">
+      <div class="insight-title">
+        <span style="color: var(--accent);">⚡</span>
+        Why Per-Unit Visibility Matters
+      </div>
+
+      <div class="gap-indicator" id="gapIndicator">
+        <div class="gap-text">
+          <div class="gap-text-label">Difference per unit / month</div>
+          <div class="gap-text-value" id="gapValue">€ —</div>
+          <div class="gap-text-detail" id="gapDetail">What the average hides about this unit</div>
+        </div>
+        <div class="gap-text" style="text-align: right;">
+          <div class="gap-text-label">Annualised</div>
+          <div class="gap-text-value" id="gapAnnual">€ —</div>
+          <div class="gap-text-detail">12-month projection of this difference</div>
+        </div>
+      </div>
+
+      <ul class="insight-list" id="insightList">
+        <li>
+          <span class="insight-icon info">i</span>
+          <span>Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         DETAILED BREAKDOWN
+         ============================================================ -->
+    <div class="breakdown-section">
+      <div class="insight-title">
+        <span style="color: var(--accent);">📊</span>
+        Cost-by-Cost Breakdown
+      </div>
+
+      <div class="breakdown-table-wrap">
+      <table class="breakdown-table">
+        <thead>
+          <tr>
+            <th>Line item</th>
+            <th class="numeric">Portfolio avg</th>
+            <th class="numeric">This unit</th>
+            <th class="numeric">Difference</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownTableBody">
+          <tr class="revenue-row">
+            <td>Monthly revenue</td>
+            <td class="numeric" id="bd_p_revenue">€ —</td>
+            <td class="numeric" id="bd_u_revenue">€ —</td>
+            <td class="numeric" id="bd_d_revenue">—</td>
+          </tr>
+          <tr class="cost-row">
+            <td>OTA commission</td>
+            <td class="numeric" id="bd_p_ota">€ —</td>
+            <td class="numeric" id="bd_u_ota">€ —</td>
+            <td class="numeric" id="bd_d_ota">—</td>
+          </tr>
+          <tr class="cost-row">
+            <td>Owner payout / rent</td>
+            <td class="numeric" id="bd_p_owner">€ —</td>
+            <td class="numeric" id="bd_u_owner">€ —</td>
+            <td class="numeric" id="bd_d_owner">—</td>
+          </tr>
+          <tr class="cost-row">
+            <td>Cleaning</td>
+            <td class="numeric" id="bd_p_cleaning">€ —</td>
+            <td class="numeric" id="bd_u_cleaning">€ —</td>
+            <td class="numeric" id="bd_d_cleaning">—</td>
+          </tr>
+          <tr class="cost-row">
+            <td>Local taxes</td>
+            <td class="numeric" id="bd_p_taxes">€ —</td>
+            <td class="numeric" id="bd_u_taxes">€ —</td>
+            <td class="numeric" id="bd_d_taxes">—</td>
+          </tr>
+          <tr class="cost-row">
+            <td>Hidden costs (total)</td>
+            <td class="numeric" id="bd_p_hidden">€ —</td>
+            <td class="numeric" id="bd_u_hidden">€ —</td>
+            <td class="numeric" id="bd_d_hidden">—</td>
+          </tr>
+          <tr class="margin-row">
+            <td>Contribution Margin</td>
+            <td class="numeric" id="bd_p_margin">€ —</td>
+            <td class="numeric" id="bd_u_margin">€ —</td>
+            <td class="numeric" id="bd_d_margin">—</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="breakdown-cards" id="breakdownCards" aria-label="Cost breakdown by line item"></div>
+    </div>
+
+    <!-- ============================================================
+         CLOSING CTA — METHODOLOGY REINFORCEMENT
+         ============================================================ -->
+    <div class="methodology-cta">
+      <div class="methodology-content">
+        <div class="methodology-label">What this means for your operation</div>
+        <h2 class="methodology-title">Your tech stack should reveal this automatically.</h2>
+        <p class="methodology-text">
+          Running this analysis manually for one unit is useful. Running it for every unit in your portfolio, every month, is where the real commercial advantage lives. Most operators do not have this visibility because their systems were not designed to surface it. That is the gap between an operation that knows its numbers and one that hopes for the best.
+        </p>
+        <p class="methodology-text">
+          The operators who build cost transparency into their tech stack make better decisions: which units to keep, which agreements to renegotiate, which channels to invest in, which costs to challenge. The ones who do not, find out too late.
+        </p>
+        <div class="methodology-actions">
+          <a href="https://linkedin.com/in/roger-bisschoff" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.127 0 2.062 2.062 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ACTIONS
+         ============================================================ -->
+    <div class="action-bar no-print">
+      <button class="btn btn-primary" onclick="calculate()" type="button">Recalculate</button>
+      <button class="btn" onclick="exportResults()" type="button">Copy Summary</button>
+      <button class="btn" onclick="window.print()" type="button">Print / PDF</button>
+    </div>
+
+  </main>
+
+  <div class="framework-attribution">
+    <div class="attribution-content">
+      <div class="attribution-text">
+        <strong>Framework by Roger Bisschoff</strong> · First published 2026 · Part of the Operator Intelligence Suite
+      </div>
+      <a href="https://rbisschoff.github.io/operator-intelligence-suite/" class="attribution-link">View the full suite →</a>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <p>Part of the <strong>Operator Series</strong> by <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a></p>
+    <p style="margin-top: 8px;">Building cost transparency is the first step to building a profitable operation.</p>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    let resultMode = { p: 'currency', u: 'currency' };
+    let chartPortfolio = null;
+    let chartUnit = null;
+    let animFrames = {};
+    let lastNumeric = {};
+
+    const COST_COLORS = {
+      ota: '#C0392B',
+      owner: '#5D6D7E',
+      cleaning: '#E59866',
+      taxes: '#F39C12',
+      hidden: '#7F8C8D',
+      margin: '#1E8449'
+    };
+
+    const COST_LABELS = [
+      { key: 'ota', label: 'OTA' },
+      { key: 'owner', label: 'Owner' },
+      { key: 'cleaning', label: 'Cleaning' },
+      { key: 'taxes', label: 'Taxes' },
+      { key: 'hidden', label: 'Hidden' },
+      { key: 'margin', label: 'Margin' }
+    ];
+
+    // ============================================================
+    // INPUT MANAGEMENT
+    // ============================================================
+    function updateOwnerInput(prefix) {
+      const type = document.getElementById(`${prefix}_ownerType`).value;
+      const label = document.getElementById(`${prefix}_ownerValueLabel`);
+      const suffix = document.getElementById(`${prefix}_ownerValueSuffix`);
+      const prefixEl = document.getElementById(`${prefix}_ownerValuePrefix`);
+      const input = document.getElementById(`${prefix}_ownerValue`);
+
+      if (type === 'revShare') {
+        label.textContent = 'Owner share (% of net revenue)';
+        suffix.style.display = 'inline';
+        prefixEl.style.display = 'none';
+        input.classList.add('with-suffix');
+        input.classList.add('no-prefix');
+        input.value = prefix === 'p' ? 70 : 75;
+      } else if (type === 'fixedRent') {
+        label.textContent = 'Fixed monthly rent';
+        suffix.style.display = 'none';
+        prefixEl.style.display = 'inline';
+        input.classList.remove('with-suffix');
+        input.classList.remove('no-prefix');
+        input.value = prefix === 'p' ? 1800 : 2200;
+      } else if (type === 'mgmtFee') {
+        label.textContent = 'Management fee to operator (%)';
+        suffix.style.display = 'inline';
+        prefixEl.style.display = 'none';
+        input.classList.add('with-suffix');
+        input.classList.add('no-prefix');
+        input.value = prefix === 'p' ? 20 : 25;
+      }
+      calculate();
+    }
+
+    function toggleHiddenCosts(prefix) {
+      const content = document.getElementById(`${prefix}_hiddenContent`);
+      const icon = document.getElementById(`${prefix}_hiddenToggleIcon`);
+      const btn = document.getElementById(`${prefix}_hiddenToggle`);
+      const open = content.classList.toggle('open');
+      icon.textContent = open ? '▲' : '▼';
+      if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function toggleResultMode(prefix) {
+      resultMode[prefix] = resultMode[prefix] === 'currency' ? 'percent' : 'currency';
+      lastNumeric[prefix] = null;
+      document.getElementById(`${prefix}_toggleText`).textContent = 
+        resultMode[prefix] === 'currency' ? 'Show as % of revenue' : 'Show in €';
+      calculate();
+    }
+
+    // ============================================================
+    // CALCULATIONS
+    // ============================================================
+    function getInputs(prefix) {
+      return {
+        units: prefix === 'p' ? (parseFloat(document.getElementById('p_units').value) || 1) : 1,
+        revenue: parseFloat(document.getElementById(`${prefix}_revenue`).value) || 0,
+        ownerType: document.getElementById(`${prefix}_ownerType`).value,
+        ownerValue: parseFloat(document.getElementById(`${prefix}_ownerValue`).value) || 0,
+        otaShare: parseFloat(document.getElementById(`${prefix}_otaShare`).value) || 0,
+        otaCommission: parseFloat(document.getElementById(`${prefix}_otaCommission`).value) || 0,
+        cleaning: parseFloat(document.getElementById(`${prefix}_cleaning`).value) || 0,
+        taxes: parseFloat(document.getElementById(`${prefix}_taxes`).value) || 0,
+        utilities: parseFloat(document.getElementById(`${prefix}_utilities`).value) || 0,
+        internet: parseFloat(document.getElementById(`${prefix}_internet`).value) || 0,
+        linen: parseFloat(document.getElementById(`${prefix}_linen`).value) || 0,
+        maintenance: parseFloat(document.getElementById(`${prefix}_maintenance`).value) || 0,
+        insurance: parseFloat(document.getElementById(`${prefix}_insurance`).value) || 0,
+        localTeam: parseFloat(document.getElementById(`${prefix}_localTeam`).value) || 0
+      };
+    }
+
+    function calculateMargin(i) {
+      const otaRevenue = i.revenue * (i.otaShare / 100);
+      const otaCommissionAmount = otaRevenue * (i.otaCommission / 100);
+      
+      // Net revenue after channel costs (for owner share calculation)
+      const netRevenue = i.revenue - otaCommissionAmount;
+      
+      // Owner cost depends on agreement type
+      let ownerCost = 0;
+      if (i.ownerType === 'revShare') {
+        ownerCost = netRevenue * (i.ownerValue / 100);
+      } else if (i.ownerType === 'fixedRent') {
+        ownerCost = i.ownerValue;
+      } else if (i.ownerType === 'mgmtFee') {
+        // In mgmt fee model, operator takes a fee and the rest goes to owner
+        // We treat owner cost as: revenue minus operator's fee
+        ownerCost = i.revenue - (i.revenue * (i.ownerValue / 100));
+      }
+      
+      const hiddenCosts = i.utilities + i.internet + i.linen + i.maintenance + i.insurance + i.localTeam;
+      const totalCosts = otaCommissionAmount + ownerCost + i.cleaning + i.taxes + hiddenCosts;
+      const margin = i.revenue - totalCosts;
+      const marginPercent = i.revenue > 0 ? (margin / i.revenue) * 100 : 0;
+      
+      return {
+        revenue: i.revenue,
+        ota: otaCommissionAmount,
+        owner: ownerCost,
+        cleaning: i.cleaning,
+        taxes: i.taxes,
+        hidden: hiddenCosts,
+        totalCosts: totalCosts,
+        margin: margin,
+        marginPercent: marginPercent
+      };
+    }
+
+    function calculate() {
+      const pInputs = getInputs('p');
+      const uInputs = getInputs('u');
+      
+      const pResult = calculateMargin(pInputs);
+      const uResult = calculateMargin(uInputs);
+
+      // Update result highlights
+      updateResultHighlight('p', pResult);
+      updateResultHighlight('u', uResult);
+
+      // Update breakdown table
+      updateBreakdownTable(pResult, uResult);
+
+      // Update gap insight
+      updateGapInsight(pResult, uResult, pInputs, uInputs);
+
+      // Composition charts & mobile breakdown
+      renderCompositionCharts(pResult, uResult);
+      updateBreakdownCards(pResult, uResult);
+
+      // Save state
+      saveState();
+    }
+
+    function animateCount(el, target, formatter, prefix) {
+      if (animFrames[prefix]) cancelAnimationFrame(animFrames[prefix]);
+      const start = lastNumeric[prefix] != null ? lastNumeric[prefix] : target;
+      if (Math.abs(target - start) < 0.5) {
+        el.textContent = formatter(target);
+        lastNumeric[prefix] = target;
+        return;
+      }
+      const panel = el.closest('.result-highlight');
+      if (panel) panel.classList.add('pulse');
+      el.classList.add('animating');
+      const duration = 420;
+      const t0 = performance.now();
+      function step(now) {
+        const t = Math.min(1, (now - t0) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const current = start + (target - start) * eased;
+        el.textContent = formatter(current);
+        if (t < 1) {
+          animFrames[prefix] = requestAnimationFrame(step);
+        } else {
+          el.classList.remove('animating');
+          if (panel) setTimeout(() => panel.classList.remove('pulse'), 450);
+          lastNumeric[prefix] = target;
+          animFrames[prefix] = null;
+        }
+      }
+      animFrames[prefix] = requestAnimationFrame(step);
+    }
+
+    function updateResultHighlight(prefix, r) {
+      const valueEl = document.getElementById(`${prefix}_marginValue`);
+      const detailEl = document.getElementById(`${prefix}_marginDetail`);
+
+      if (resultMode[prefix] === 'currency') {
+        animateCount(valueEl, r.margin, v => formatEuro(v), prefix);
+        detailEl.textContent = `${r.marginPercent.toFixed(1)}% of revenue`;
+      } else {
+        animateCount(valueEl, r.marginPercent, v => `${v.toFixed(1)}%`, prefix);
+        detailEl.textContent = `${formatEuro(r.margin)} per unit / month`;
+      }
+    }
+
+    function updateBreakdownTable(p, u) {
+      document.getElementById('bd_p_revenue').textContent = formatEuro(p.revenue);
+      document.getElementById('bd_u_revenue').textContent = formatEuro(u.revenue);
+      document.getElementById('bd_d_revenue').innerHTML = formatDelta(u.revenue - p.revenue, true);
+      
+      document.getElementById('bd_p_ota').textContent = formatEuro(p.ota);
+      document.getElementById('bd_u_ota').textContent = formatEuro(u.ota);
+      document.getElementById('bd_d_ota').innerHTML = formatDelta(u.ota - p.ota, false);
+      
+      document.getElementById('bd_p_owner').textContent = formatEuro(p.owner);
+      document.getElementById('bd_u_owner').textContent = formatEuro(u.owner);
+      document.getElementById('bd_d_owner').innerHTML = formatDelta(u.owner - p.owner, false);
+      
+      document.getElementById('bd_p_cleaning').textContent = formatEuro(p.cleaning);
+      document.getElementById('bd_u_cleaning').textContent = formatEuro(u.cleaning);
+      document.getElementById('bd_d_cleaning').innerHTML = formatDelta(u.cleaning - p.cleaning, false);
+      
+      document.getElementById('bd_p_taxes').textContent = formatEuro(p.taxes);
+      document.getElementById('bd_u_taxes').textContent = formatEuro(u.taxes);
+      document.getElementById('bd_d_taxes').innerHTML = formatDelta(u.taxes - p.taxes, false);
+      
+      document.getElementById('bd_p_hidden').textContent = formatEuro(p.hidden);
+      document.getElementById('bd_u_hidden').textContent = formatEuro(u.hidden);
+      document.getElementById('bd_d_hidden').innerHTML = formatDelta(u.hidden - p.hidden, false);
+      
+      document.getElementById('bd_p_margin').textContent = formatEuro(p.margin);
+      document.getElementById('bd_u_margin').textContent = formatEuro(u.margin);
+      document.getElementById('bd_d_margin').innerHTML = formatDelta(u.margin - p.margin, true);
+    }
+
+    function updateBreakdownCards(p, u) {
+      const rows = [
+        { label: 'Monthly revenue', p: p.revenue, u: u.revenue, delta: u.revenue - p.revenue, good: true, isMargin: false },
+        { label: 'OTA commission', p: p.ota, u: u.ota, delta: u.ota - p.ota, good: false, isMargin: false },
+        { label: 'Owner payout / rent', p: p.owner, u: u.owner, delta: u.owner - p.owner, good: false, isMargin: false },
+        { label: 'Cleaning', p: p.cleaning, u: u.cleaning, delta: u.cleaning - p.cleaning, good: false, isMargin: false },
+        { label: 'Local taxes', p: p.taxes, u: u.taxes, delta: u.taxes - p.taxes, good: false, isMargin: false },
+        { label: 'Hidden costs (total)', p: p.hidden, u: u.hidden, delta: u.hidden - p.hidden, good: false, isMargin: false },
+        { label: 'Contribution Margin', p: p.margin, u: u.margin, delta: u.margin - p.margin, good: true, isMargin: true }
+      ];
+      document.getElementById('breakdownCards').innerHTML = rows.map(row => `
+        <div class="breakdown-card">
+          <div class="breakdown-card-label">${row.label}</div>
+          <div class="breakdown-card-row${row.isMargin ? ' is-margin' : ''}">
+            <span class="col-label">${row.isMargin ? 'Net margin' : 'Portfolio · Unit · Diff'}</span>
+            <span class="col-values">
+              <span>${formatEuro(row.p)} <span class="sub">portfolio</span></span>
+              <span>${formatEuro(row.u)} <span class="sub">this unit</span></span>
+              <span>${formatDelta(row.delta, row.good)}</span>
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCompositionCharts(p, u) {
+      renderDonut('chartPortfolio', 'legendPortfolio', p, chartPortfolio, c => { chartPortfolio = c; });
+      renderDonut('chartUnit', 'legendUnit', u, chartUnit, c => { chartUnit = c; });
+    }
+
+    function renderDonut(canvasId, legendId, result, existingChart, setChart) {
+      const ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+      const values = [
+        Math.max(0, result.ota),
+        Math.max(0, result.owner),
+        Math.max(0, result.cleaning),
+        Math.max(0, result.taxes),
+        Math.max(0, result.hidden),
+        Math.max(0, result.margin)
+      ];
+      const total = values.reduce((a, b) => a + b, 0) || 1;
+      const labels = COST_LABELS.map((c, i) => c.label);
+      const colors = COST_LABELS.map(c => COST_COLORS[c.key]);
+
+      if (existingChart) existingChart.destroy();
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                  return ` ${ctx.label}: ${formatEuro(ctx.parsed)} (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+      setChart(chart);
+
+      document.getElementById(legendId).innerHTML = COST_LABELS.map((c, i) => {
+        const pct = ((values[i] / total) * 100).toFixed(0);
+        return `<span><i style="background:${COST_COLORS[c.key]}"></i>${c.label} ${pct}%</span>`;
+      }).join('');
+    }
+
+    function formatDelta(value, isPositiveGood) {
+      const rounded = Math.round(value);
+      if (rounded === 0) return '<span style="color: var(--muted);">—</span>';
+      
+      const cls = ((rounded > 0 && isPositiveGood) || (rounded < 0 && !isPositiveGood)) 
+        ? 'delta-positive' 
+        : 'delta-negative';
+      
+      const sign = rounded > 0 ? '+' : '';
+      return `<span class="${cls}">${sign}${formatEuro(rounded)}</span>`;
+    }
+
+    function updateGapInsight(p, u, pIn, uIn) {
+      const gap = u.margin - p.margin;
+      const annualGap = gap * 12;
+
+      const gapEl = document.getElementById('gapValue');
+      const annualEl = document.getElementById('gapAnnual');
+      animateCount(gapEl, gap, v => formatEuro(v), 'gap');
+      animateCount(annualEl, annualGap, v => formatEuro(v), 'gapAnnual');
+      
+      let detail = '';
+      if (gap !== 0) {
+        detail = 'Each unit has its own cost story. The portfolio average shows none of it.';
+        document.getElementById('gapValue').style.color = 'var(--accent-dark)';
+      } else {
+        detail = 'This unit matches the portfolio average. Run the analysis for every unit to find the ones that do not.';
+        document.getElementById('gapValue').style.color = 'var(--accent-dark)';
+      }
+      document.getElementById('gapDetail').textContent = detail;
+
+      // Generate insights
+      const insights = generateInsights(p, u, pIn, uIn);
+      const listEl = document.getElementById('insightList');
+      listEl.innerHTML = insights.map(insight => `
+        <li>
+          <span class="insight-icon ${insight.type}">${insight.icon}</span>
+          <span>${insight.text}</span>
+        </li>
+      `).join('');
+    }
+
+    function generateInsights(p, u, pIn, uIn) {
+      const insights = [];
+      
+      // Owner cost difference - educational framing
+      const pOwnerPct = pIn.revenue > 0 ? (p.owner / pIn.revenue) * 100 : 0;
+      const uOwnerPct = uIn.revenue > 0 ? (u.owner / uIn.revenue) * 100 : 0;
+      if (Math.abs(uOwnerPct - pOwnerPct) > 3) {
+        insights.push({
+          type: 'info',
+          icon: 'i',
+          text: `<strong>The owner cost on this unit (${uOwnerPct.toFixed(1)}% of revenue) is different from your portfolio average (${pOwnerPct.toFixed(1)}%).</strong> This is the kind of variation an average hides. Worth understanding why: different agreement terms, different unit type, or simply a relationship that was negotiated at a different moment.`
+        });
+      }
+
+      // Cleaning cost difference - educational framing
+      if (p.cleaning > 0 && Math.abs(u.cleaning - p.cleaning) / p.cleaning > 0.20) {
+        const diff = ((u.cleaning - p.cleaning) / p.cleaning * 100).toFixed(0);
+        const direction = u.cleaning > p.cleaning ? 'higher' : 'lower';
+        insights.push({
+          type: 'info',
+          icon: 'i',
+          text: `<strong>Cleaning cost on this unit is ${Math.abs(diff)}% ${direction} than your portfolio average.</strong> Could be unit size, turnover frequency, or the cleaning arrangement itself. Across a portfolio of twenty or thirty units, these variations add up to meaningful money — but only if you can see them.`
+        });
+      }
+
+      // OTA dependency - educational framing
+      if (Math.abs(uIn.otaShare - pIn.otaShare) > 8) {
+        const direction = uIn.otaShare > pIn.otaShare ? 'higher' : 'lower';
+        insights.push({
+          type: 'info',
+          icon: 'i',
+          text: `<strong>OTA dependency on this unit (${uIn.otaShare}%) is ${direction} than your portfolio average (${pIn.otaShare}%).</strong> Each unit attracts demand differently. Understanding this per unit lets you decide where to invest in direct demand and where to accept OTA dependency as the cost of doing business.`
+        });
+      }
+
+      // Hidden costs message
+      if (p.hidden === 0 && u.hidden === 0) {
+        insights.push({
+          type: 'warning',
+          icon: '⚠',
+          text: '<strong>Hidden costs are currently set to zero.</strong> Most operators have utilities, internet, linen, maintenance reserves, and local team costs that quietly eat margin every month. These rarely appear in reporting because they are not tracked per unit. Add them above to see how the picture changes.'
+        });
+      }
+
+      // Margin difference - reframed as data point, not judgment
+      if (Math.abs(u.marginPercent - p.marginPercent) > 5) {
+        const direction = u.marginPercent > p.marginPercent ? 'higher' : 'lower';
+        insights.push({
+          type: 'info',
+          icon: 'i',
+          text: `<strong>This unit's margin is ${direction} than the portfolio average.</strong> The reason matters more than the number. Look at the breakdown below: which cost layers drive the difference? That is where commercial decisions can be made — pricing, channel mix, owner conversations, operational changes.`
+        });
+      }
+
+      // Always include the methodology insight at the end
+      insights.push({
+        type: 'info',
+        icon: '→',
+        text: '<strong>Now imagine doing this for every unit in your portfolio.</strong> The patterns become visible. Which units are quietly carrying the business, which ones are quietly losing money, which agreements need renegotiation, which channels need rebalancing. This is what cost transparency at scale looks like.'
+      });
+
+      return insights;
+    }
+
+    // ============================================================
+    // UTILITIES
+    // ============================================================
+    function formatEuro(value) {
+      const rounded = Math.round(value);
+      return '€ ' + rounded.toLocaleString('en-EU').replace(/,/g, '.');
+    }
+
+    function saveState() {
+      const state = {};
+      document.querySelectorAll('input, select').forEach(el => {
+        state[el.id] = el.value;
+      });
+      localStorage.setItem('cma-v2-state', JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem('cma-v2-state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          Object.keys(state).forEach(key => {
+            const el = document.getElementById(key);
+            if (el) el.value = state[key];
+          });
+        } catch (e) {
+          console.error('Failed to load state', e);
+        }
+      }
+    }
+
+    function resetForm() {
+      if (confirm('Reset all values to defaults?')) {
+        localStorage.removeItem('cma-v2-state');
+        location.reload();
+      }
+    }
+
+    function shareResult() {
+      const state = {};
+      document.querySelectorAll('input, select').forEach(el => {
+        state[el.id] = el.value;
+      });
+      const params = new URLSearchParams(state).toString();
+      const url = window.location.origin + window.location.pathname + '#' + params;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Shareable URL copied to clipboard');
+      });
+    }
+
+    function exportResults() {
+      const pInputs = getInputs('p');
+      const uInputs = getInputs('u');
+      const pResult = calculateMargin(pInputs);
+      const uResult = calculateMargin(uInputs);
+      const gap = uResult.margin - pResult.margin;
+      
+      const summary = `CONTRIBUTION MARGIN ANALYSIS
+Operator Series — by Roger Bisschoff
+
+PORTFOLIO BIRDVIEW (Avg per unit / month):
+- Revenue: ${formatEuro(pResult.revenue)}
+- Total costs: ${formatEuro(pResult.totalCosts)}
+- Contribution margin: ${formatEuro(pResult.margin)} (${pResult.marginPercent.toFixed(1)}%)
+
+THIS UNIT (Monthly):
+- Revenue: ${formatEuro(uResult.revenue)}
+- Total costs: ${formatEuro(uResult.totalCosts)}
+- Contribution margin: ${formatEuro(uResult.margin)} (${uResult.marginPercent.toFixed(1)}%)
+
+THE GAP:
+- Difference per unit / month: ${formatEuro(gap)}
+- Annualised: ${formatEuro(gap * 12)}
+
+Generated by Operator Series Contribution Margin Analyser`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        alert('Summary copied to clipboard');
+      });
+    }
+
+    function loadFromHash() {
+      if (window.location.hash) {
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        params.forEach((value, key) => {
+          const el = document.getElementById(key);
+          if (el) el.value = value;
+        });
+      }
+    }
+
+    // ============================================================
+    // INITIALIZATION
+    // ============================================================
+    function initInfoTips() {
+      document.querySelectorAll('.info-tip').forEach(tip => {
+        const text = tip.getAttribute('data-tip') || '';
+        tip.setAttribute('role', 'button');
+        tip.setAttribute('tabindex', '0');
+        tip.setAttribute('aria-label', text);
+        tip.addEventListener('click', e => {
+          e.stopPropagation();
+          const open = tip.classList.contains('active');
+          document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
+          if (!open) tip.classList.add('active');
+        });
+        tip.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            tip.click();
+          }
+        });
+      });
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      loadFromHash();
+      initInfoTips();
+      updateOwnerInput('p');
+      updateOwnerInput('u');
+      calculate();
+      
+      document.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('input', calculate);
+      });
+    });
+  </script>
+
+</body>
+</html>
