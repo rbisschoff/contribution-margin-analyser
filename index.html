@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Contribution Margin Analyser — Operator Series</title>
   <meta name="description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs. Build cost transparency. Part of the Operator Series.">
   
@@ -1479,6 +1479,60 @@
         margin-top: 16px;
         padding: 12px 0;
         font-size: 9pt;
+      }
+    }
+
+    /* ============================================================
+       MOBILE
+       ============================================================ */
+    @media (max-width: 640px) {
+      html, body { overflow-x: clip; }
+      .brand-subtitle { display: none; }
+      .brand-title {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 34vw;
+      }
+      .header-inner {
+        padding: 10px 12px;
+        padding-top: calc(10px + env(safe-area-inset-top));
+        gap: 8px;
+      }
+      .lang-btn {
+        padding: 8px 9px;
+        min-height: 36px;
+        gap: 0;
+        font-size: 0;
+      }
+      .lang-flag { font-size: 15px; }
+      .header-actions { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+      .btn-ghost {
+        padding: 8px 10px;
+        font-size: 12px;
+        min-height: 36px;
+      }
+      main {
+        padding: 24px max(12px, env(safe-area-inset-left)) calc(28px + env(safe-area-inset-bottom));
+        padding-right: max(12px, env(safe-area-inset-right));
+      }
+      input[type="number"], select {
+        font-size: 16px !important;
+        min-height: 44px;
+      }
+      .btn-primary, .btn.btn-primary {
+        width: 100%;
+        min-height: 48px;
+        box-sizing: border-box;
+      }
+      .methodology-cta {
+        padding: 28px 18px;
+      }
+      .methodology-cta .btn-linkedin {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
       }
     }
   </style>
