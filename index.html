@@ -29,34 +29,36 @@
        OPERATOR SERIES BRANDING
        ============================================================ */
     :root {
-      --accent: #1B4F72;
-      --accent-dark: #0a2a3d;
-      --accent-light: #D6EAF8;
-      --alert: #C0392B;
-      --positive: #1E8449;
-      --warning: #F39C12;
-      
-      --ink: #0A0A0F;
-      --ink2: #2C2C3A;
-      --muted: #7A7A8C;
-      --muted2: #ADADBE;
-      
+      --accent: #007AFF;
+      --accent-dark: #0051D5;
+      --accent-light: rgba(0, 122, 255, 0.12);
+      --accent-secondary: #5856D6;
+      --alert: #FF3B30;
+      --positive: #34C759;
+      --warning: #FF9500;
+
+      --ink: #1C1C1E;
+      --ink2: #3A3A3C;
+      --muted: #8E8E93;
+      --muted2: #AEAEB2;
+
       --bg: #F2F2F7;
       --card: #FFFFFF;
       --card2: #F9F9FB;
-      --border: #E5E5EA;
-      --border-light: #F0F0F4;
-      
-      --portfolio: #5D6D7E;
-      --unit: #1B4F72;
-      
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --radius-sm: 10px;
-      
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow-lg: 0 8px 28px rgba(0,0,0,0.09);
+      --border: rgba(60, 60, 67, 0.12);
+      --border-light: rgba(60, 60, 67, 0.08);
+
+      --portfolio: #8E8E93;
+      --unit: #007AFF;
+
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
+      --shadow-card: 0 2px 16px rgba(0,0,0,0.06);
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
       --section-gap: 40px;
     }
@@ -107,13 +109,14 @@
       width: 32px;
       height: 32px;
       background: var(--accent);
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 700;
       font-size: 14px;
+      box-shadow: 0 2px 10px rgba(0, 122, 255, 0.35);
     }
 
     .brand-text {
@@ -157,6 +160,47 @@
     .btn-ghost:focus-visible {
       outline: 2px solid rgba(255,255,255,0.6);
       outline-offset: 2px;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      padding: 3px;
+    }
+
+    .lang-btn {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.55);
+      background: transparent;
+      border: none;
+      border-radius: 100px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .lang-btn:hover {
+      color: #fff;
+    }
+
+    .lang-btn.active {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+    }
+
+    .lang-flag {
+      font-size: 13px;
+      line-height: 1;
     }
 
     /* ============================================================
@@ -1101,14 +1145,14 @@
        METHODOLOGY CTA PANEL
        ============================================================ */
     .methodology-cta {
-      background: linear-gradient(145deg, #0a2a3d 0%, var(--accent) 45%, #1a5276 100%);
+      background: linear-gradient(145deg, var(--accent-dark) 0%, var(--accent) 45%, #5856D6 100%);
       color: white;
       border-radius: var(--radius-lg);
       padding: 48px 36px;
       margin-bottom: var(--section-gap);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(27, 79, 114, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 122, 255, 0.22);
     }
 
     .methodology-cta::before {
@@ -1389,12 +1433,12 @@
 
       .result-highlight,
       .result-highlight.portfolio {
-        background: #1B4F72 !important;
+        background: #007AFF !important;
         color: white !important;
       }
 
       .result-highlight.portfolio {
-        background: #5D6D7E !important;
+        background: #8E8E93 !important;
       }
 
       .insight-section,
@@ -1419,7 +1463,7 @@
       }
 
       .methodology-cta {
-        background: #1B4F72 !important;
+        background: #007AFF !important;
         color: white !important;
         break-before: page;
         padding: 24px;
@@ -1449,13 +1493,18 @@
       <div class="brand">
         <div class="brand-mark">€</div>
         <div class="brand-text">
-          <div class="brand-title">Contribution Margin Analyser</div>
-          <div class="brand-subtitle">Operator Series</div>
+          <div class="brand-title" data-i18n="brandTitle">Contribution Margin Analyser</div>
+          <div class="brand-subtitle" data-i18n="brandSubtitle">Operator Series</div>
         </div>
       </div>
       <div class="header-actions no-print">
-        <button class="btn-ghost" onclick="resetForm()" type="button">Reset</button>
-        <button class="btn-ghost" onclick="shareResult()" type="button">Share</button>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true"><span class="lang-flag" aria-hidden="true">🇬🇧</span> EN</button>
+          <button type="button" class="lang-btn" data-lang="it" aria-pressed="false"><span class="lang-flag" aria-hidden="true">🇮🇹</span> IT</button>
+          <button type="button" class="lang-btn" data-lang="de" aria-pressed="false"><span class="lang-flag" aria-hidden="true">🇩🇪</span> DE</button>
+        </div>
+        <button class="btn-ghost" onclick="resetForm()" type="button" data-i18n="resetBtn">Reset</button>
+        <button class="btn-ghost" onclick="shareResult()" type="button" data-i18n="shareBtn">Share</button>
       </div>
     </div>
   </header>
@@ -1466,8 +1515,8 @@
   <main>
 
     <div class="intro">
-      <h1>Portfolio averages hide what unit-level analysis reveals.</h1>
-      <p>Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically — every month, across every unit you operate.</p>
+      <h1 data-i18n="heroTitle">Portfolio averages hide what unit-level analysis reveals.</h1>
+      <p data-i18n="heroSubtitle">Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.</p>
     </div>
 
     <!-- ============================================================
@@ -1483,27 +1532,27 @@
         <div class="card-header">
           <div class="card-title">
             <span class="card-icon">🔭</span>
-            Portfolio Birdview
+            <span data-i18n="cardPortfolioTitle">Portfolio Birdview</span>
           </div>
-          <span class="card-badge portfolio">Average</span>
+          <span class="card-badge portfolio" data-i18n="badgeAverage">Average</span>
         </div>
 
         <!-- Revenue -->
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent" style="background: var(--portfolio);"></span>
-            Revenue
+            <span data-i18n="secRevenue">Revenue</span>
           </div>
           
           <div class="input-group-row">
             <div class="input-group">
-              <label for="p_units">Units in portfolio</label>
+              <label for="p_units" data-i18n="lblUnitsInPortfolio">Units in portfolio</label>
               <div class="input-wrapper">
                 <input type="number" id="p_units" value="20" min="1" step="1" class="no-prefix">
               </div>
             </div>
             <div class="input-group">
-              <label for="p_revenue">Avg monthly revenue / unit</label>
+              <label for="p_revenue" data-i18n="lblAvgRevenuePerUnit">Avg monthly revenue / unit</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_revenue" value="3500" min="0" step="50">
@@ -1516,24 +1565,24 @@
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent" style="background: var(--portfolio);"></span>
-            Owner Agreement
+            <span data-i18n="secOwnerAgreement">Owner Agreement</span>
           </div>
           
           <div class="input-group">
             <label for="p_ownerType">
-              Most common agreement type
-              <span class="info-tip" data-tip="Revenue share: owner gets % of net revenue. Fixed rent: owner gets fixed monthly amount. Management fee: you keep the property revenue and pay owner a fee.">i</span>
+              <span data-i18n="lblAgreementTypeP">Most common agreement type</span>
+              <span class="info-tip" data-i18n-tip="tipOwnerTypeP" data-tip="Revenue share: owner gets % of net revenue. Fixed rent: owner gets fixed monthly amount. Management fee: you keep the property revenue and pay owner a fee.">i</span>
             </label>
             <select id="p_ownerType" class="no-prefix" onchange="updateOwnerInput('p')">
-              <option value="revShare">Revenue share (%)</option>
-              <option value="fixedRent">Fixed monthly rent (€)</option>
-              <option value="mgmtFee">Management fee (% to operator)</option>
+              <option value="revShare" data-i18n="optRevShare">Revenue share (%)</option>
+              <option value="fixedRent" data-i18n="optFixedRent">Fixed monthly rent (€)</option>
+              <option value="mgmtFee" data-i18n="optMgmtFee">Management fee (% to operator)</option>
             </select>
           </div>
 
           <div class="input-group" id="p_ownerValueGroup">
             <label for="p_ownerValue">
-              <span id="p_ownerValueLabel">Owner share (%)</span>
+              <span id="p_ownerValueLabel" data-i18n="ownerValueLabelRevShare">Owner share (% of net revenue)</span>
             </label>
             <div class="input-wrapper">
               <span class="input-prefix" id="p_ownerValuePrefix" style="display:none;">€</span>
@@ -1547,14 +1596,14 @@
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent" style="background: var(--portfolio);"></span>
-            Direct Costs (monthly avg)
+            <span data-i18n="secDirectCostsP">Direct Costs (monthly avg)</span>
           </div>
 
           <div class="input-group-row">
             <div class="input-group">
               <label for="p_otaShare">
-                OTA share
-                <span class="info-tip" data-tip="% of bookings coming through OTAs (Booking.com, Airbnb, etc.)">i</span>
+                <span data-i18n="lblOtaShare">OTA share</span>
+                <span class="info-tip" data-i18n-tip="tipOtaShare" data-tip="% of bookings coming through OTAs (Booking.com, Airbnb, etc.)">i</span>
               </label>
               <div class="input-wrapper">
                 <input type="number" id="p_otaShare" value="60" min="0" max="100" step="1" class="no-prefix with-suffix">
@@ -1562,7 +1611,7 @@
               </div>
             </div>
             <div class="input-group">
-              <label for="p_otaCommission">Avg OTA commission</label>
+              <label for="p_otaCommission" data-i18n="lblOtaCommission">Avg OTA commission</label>
               <div class="input-wrapper">
                 <input type="number" id="p_otaCommission" value="17" min="0" max="30" step="0.5" class="no-prefix with-suffix">
                 <span class="input-suffix">%</span>
@@ -1572,14 +1621,14 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="p_cleaning">Cleaning / month</label>
+              <label for="p_cleaning" data-i18n="lblCleaningMonth">Cleaning / month</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_cleaning" value="180" min="0" step="10">
               </div>
             </div>
             <div class="input-group">
-              <label for="p_taxes">Local taxes / month</label>
+              <label for="p_taxes" data-i18n="lblTaxesMonth">Local taxes / month</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_taxes" value="120" min="0" step="10">
@@ -1590,20 +1639,20 @@
 
         <!-- Hidden Costs Toggle -->
         <button class="hidden-costs-toggle" onclick="toggleHiddenCosts('p')" type="button" aria-expanded="false" aria-controls="p_hiddenContent" id="p_hiddenToggle">
-          <span>⊕ Hidden costs (optional)</span>
+          <span data-i18n="hiddenCostsToggleLabel">⊕ Hidden costs (optional)</span>
           <span id="p_hiddenToggleIcon">▼</span>
         </button>
 
         <div class="hidden-costs-content" id="p_hiddenContent">
-          <div class="hidden-cost-note">
+          <div class="hidden-cost-note" data-i18n="hiddenCostNote">
             These are the costs most operators forget to track but quietly eat margin every month.
           </div>
 
           <div class="input-group-row">
             <div class="input-group">
               <label for="p_utilities">
-                Utilities allocation
-                <span class="info-tip" data-tip="Electricity, water, gas — particularly if included in guest stays.">i</span>
+                <span data-i18n="lblUtilities">Utilities allocation</span>
+                <span class="info-tip" data-i18n-tip="tipUtilities" data-tip="Electricity, water, gas, particularly if included in guest stays.">i</span>
               </label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
@@ -1611,7 +1660,7 @@
               </div>
             </div>
             <div class="input-group">
-              <label for="p_internet">Internet / cable</label>
+              <label for="p_internet" data-i18n="lblInternet">Internet / cable</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_internet" value="0" min="0" step="5">
@@ -1622,8 +1671,8 @@
           <div class="input-group-row">
             <div class="input-group">
               <label for="p_linen">
-                Linen / consumables
-                <span class="info-tip" data-tip="Towels, sheets, toiletries, coffee, etc. Often replaced more frequently than budgeted.">i</span>
+                <span data-i18n="lblLinen">Linen / consumables</span>
+                <span class="info-tip" data-i18n-tip="tipLinen" data-tip="Towels, sheets, toiletries, coffee, etc. Often replaced more frequently than budgeted.">i</span>
               </label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
@@ -1631,7 +1680,7 @@
               </div>
             </div>
             <div class="input-group">
-              <label for="p_maintenance">Maintenance reserve</label>
+              <label for="p_maintenance" data-i18n="lblMaintenance">Maintenance reserve</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_maintenance" value="0" min="0" step="10">
@@ -1641,7 +1690,7 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="p_insurance">Insurance</label>
+              <label for="p_insurance" data-i18n="lblInsurance">Insurance</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="p_insurance" value="0" min="0" step="5">
@@ -1649,8 +1698,8 @@
             </div>
             <div class="input-group">
               <label for="p_localTeam">
-                Local team allocation
-                <span class="info-tip" data-tip="Cost of cleaning coordinator, maintenance staff, guest communications attributed per unit.">i</span>
+                <span data-i18n="lblLocalTeam">Local team allocation</span>
+                <span class="info-tip" data-i18n-tip="tipLocalTeam" data-tip="Cost of cleaning coordinator, maintenance staff, guest communications attributed per unit.">i</span>
               </label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
@@ -1662,15 +1711,15 @@
 
         <!-- Portfolio Result -->
         <div class="result-highlight portfolio">
-          <div class="result-label">Portfolio avg monthly margin</div>
+          <div class="result-label" data-i18n="resultLabelPortfolio">Portfolio avg monthly margin</div>
           <div class="result-value" id="p_marginValue">€ —</div>
           <div class="result-secondary" id="p_marginDetail">— per unit / month</div>
-          <div class="result-toggle" onclick="toggleResultMode('p')" id="p_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('p')">Show as % of revenue</div>
+          <div class="result-toggle" onclick="toggleResultMode('p')" id="p_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('p')" data-i18n="toggleShowPercent">Show as % of revenue</div>
         </div>
       </div>
 
       <div class="comparison-bridge" aria-hidden="true">
-        <span class="comparison-bridge-label">vs</span>
+        <span class="comparison-bridge-label" data-i18n="vsLabel">vs</span>
       </div>
 
       <!-- ============================================================
@@ -1680,20 +1729,20 @@
         <div class="card-header">
           <div class="card-title">
             <span class="card-icon">🔬</span>
-            Single Unit Deep-Dive
+            <span data-i18n="cardUnitTitle">Single Unit Deep-Dive</span>
           </div>
-          <span class="card-badge unit">This unit</span>
+          <span class="card-badge unit" data-i18n="badgeThisUnit">This unit</span>
         </div>
 
         <!-- Revenue -->
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent"></span>
-            Revenue
+            <span data-i18n="secRevenue">Revenue</span>
           </div>
           
           <div class="input-group">
-            <label for="u_revenue">This unit's monthly revenue</label>
+            <label for="u_revenue" data-i18n="lblUnitRevenue">This unit's monthly revenue</label>
             <div class="input-wrapper">
               <span class="input-prefix">€</span>
               <input type="number" id="u_revenue" value="4200" min="0" step="50">
@@ -1705,24 +1754,24 @@
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent"></span>
-            Owner Agreement
+            <span data-i18n="secOwnerAgreement">Owner Agreement</span>
           </div>
           
           <div class="input-group">
             <label for="u_ownerType">
-              This unit's agreement type
-              <span class="info-tip" data-tip="Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.">i</span>
+              <span data-i18n="lblAgreementTypeU">This unit's agreement type</span>
+              <span class="info-tip" data-i18n-tip="tipOwnerTypeU" data-tip="Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.">i</span>
             </label>
             <select id="u_ownerType" class="no-prefix" onchange="updateOwnerInput('u')">
-              <option value="revShare">Revenue share (%)</option>
-              <option value="fixedRent">Fixed monthly rent (€)</option>
-              <option value="mgmtFee">Management fee (% to operator)</option>
+              <option value="revShare" data-i18n="optRevShare">Revenue share (%)</option>
+              <option value="fixedRent" data-i18n="optFixedRent">Fixed monthly rent (€)</option>
+              <option value="mgmtFee" data-i18n="optMgmtFee">Management fee (% to operator)</option>
             </select>
           </div>
 
           <div class="input-group" id="u_ownerValueGroup">
             <label for="u_ownerValue">
-              <span id="u_ownerValueLabel">Owner share (%)</span>
+              <span id="u_ownerValueLabel" data-i18n="ownerValueLabelRevShare">Owner share (% of net revenue)</span>
             </label>
             <div class="input-wrapper">
               <span class="input-prefix" id="u_ownerValuePrefix" style="display:none;">€</span>
@@ -1736,19 +1785,19 @@
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent"></span>
-            Direct Costs (this unit, monthly)
+            <span data-i18n="secDirectCostsU">Direct Costs (this unit, monthly)</span>
           </div>
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="u_otaShare">OTA share</label>
+              <label for="u_otaShare" data-i18n="lblOtaShare">OTA share</label>
               <div class="input-wrapper">
                 <input type="number" id="u_otaShare" value="70" min="0" max="100" step="1" class="no-prefix with-suffix">
                 <span class="input-suffix">%</span>
               </div>
             </div>
             <div class="input-group">
-              <label for="u_otaCommission">Avg OTA commission</label>
+              <label for="u_otaCommission" data-i18n="lblOtaCommission">Avg OTA commission</label>
               <div class="input-wrapper">
                 <input type="number" id="u_otaCommission" value="18" min="0" max="30" step="0.5" class="no-prefix with-suffix">
                 <span class="input-suffix">%</span>
@@ -1758,14 +1807,14 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="u_cleaning">Cleaning / month</label>
+              <label for="u_cleaning" data-i18n="lblCleaningMonth">Cleaning / month</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_cleaning" value="220" min="0" step="10">
               </div>
             </div>
             <div class="input-group">
-              <label for="u_taxes">Local taxes / month</label>
+              <label for="u_taxes" data-i18n="lblTaxesMonth">Local taxes / month</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_taxes" value="140" min="0" step="10">
@@ -1776,25 +1825,25 @@
 
         <!-- Hidden Costs Toggle -->
         <button class="hidden-costs-toggle" onclick="toggleHiddenCosts('u')" type="button" aria-expanded="false" aria-controls="u_hiddenContent" id="u_hiddenToggle">
-          <span>⊕ Hidden costs (optional)</span>
+          <span data-i18n="hiddenCostsToggleLabel">⊕ Hidden costs (optional)</span>
           <span id="u_hiddenToggleIcon">▼</span>
         </button>
 
         <div class="hidden-costs-content" id="u_hiddenContent">
-          <div class="hidden-cost-note">
+          <div class="hidden-cost-note" data-i18n="hiddenCostNote">
             These are the costs most operators forget to track but quietly eat margin every month.
           </div>
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="u_utilities">Utilities allocation</label>
+              <label for="u_utilities" data-i18n="lblUtilities">Utilities allocation</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_utilities" value="0" min="0" step="10">
               </div>
             </div>
             <div class="input-group">
-              <label for="u_internet">Internet / cable</label>
+              <label for="u_internet" data-i18n="lblInternet">Internet / cable</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_internet" value="0" min="0" step="5">
@@ -1804,14 +1853,14 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="u_linen">Linen / consumables</label>
+              <label for="u_linen" data-i18n="lblLinen">Linen / consumables</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_linen" value="0" min="0" step="5">
               </div>
             </div>
             <div class="input-group">
-              <label for="u_maintenance">Maintenance reserve</label>
+              <label for="u_maintenance" data-i18n="lblMaintenance">Maintenance reserve</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_maintenance" value="0" min="0" step="10">
@@ -1821,14 +1870,14 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="u_insurance">Insurance</label>
+              <label for="u_insurance" data-i18n="lblInsurance">Insurance</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_insurance" value="0" min="0" step="5">
               </div>
             </div>
             <div class="input-group">
-              <label for="u_localTeam">Local team allocation</label>
+              <label for="u_localTeam" data-i18n="lblLocalTeam">Local team allocation</label>
               <div class="input-wrapper">
                 <span class="input-prefix">€</span>
                 <input type="number" id="u_localTeam" value="0" min="0" step="10">
@@ -1839,10 +1888,10 @@
 
         <!-- Unit Result -->
         <div class="result-highlight">
-          <div class="result-label">This unit's monthly margin</div>
+          <div class="result-label" data-i18n="resultLabelUnit">This unit's monthly margin</div>
           <div class="result-value" id="u_marginValue">€ —</div>
           <div class="result-secondary" id="u_marginDetail">— for this unit / month</div>
-          <div class="result-toggle" onclick="toggleResultMode('u')" id="u_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('u')">Show as % of revenue</div>
+          <div class="result-toggle" onclick="toggleResultMode('u')" id="u_toggleText" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleResultMode('u')" data-i18n="toggleShowPercent">Show as % of revenue</div>
         </div>
       </div>
 
@@ -1855,18 +1904,18 @@
     <div class="composition-section">
       <div class="insight-title">
         <span style="color: var(--accent);">◎</span>
-        Cost Composition
+        <span data-i18n="compTitle">Cost Composition</span>
       </div>
-      <p class="sec-desc" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:4px;">Same revenue, different cost layers — this is what portfolio averages flatten out.</p>
+      <p class="sec-desc" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:4px;" data-i18n="compDesc">Same revenue, different cost layers: this is what portfolio averages flatten out.</p>
       <div class="composition-grid">
         <div class="composition-card portfolio-card">
-          <div class="composition-card-title">Portfolio average</div>
-          <div class="composition-chart-wrap"><canvas id="chartPortfolio" aria-label="Portfolio cost composition chart"></canvas></div>
+          <div class="composition-card-title" data-i18n="compPortfolioLabel">Portfolio average</div>
+          <div class="composition-chart-wrap"><canvas id="chartPortfolio" aria-label="Portfolio cost composition chart" data-i18n-aria="ariaCompPortfolio"></canvas></div>
           <div class="composition-legend" id="legendPortfolio"></div>
         </div>
         <div class="composition-card unit-card">
-          <div class="composition-card-title">This unit</div>
-          <div class="composition-chart-wrap"><canvas id="chartUnit" aria-label="Unit cost composition chart"></canvas></div>
+          <div class="composition-card-title" data-i18n="badgeThisUnit">This unit</div>
+          <div class="composition-chart-wrap"><canvas id="chartUnit" aria-label="Unit cost composition chart" data-i18n-aria="ariaCompUnit"></canvas></div>
           <div class="composition-legend" id="legendUnit"></div>
         </div>
       </div>
@@ -1878,26 +1927,26 @@
     <div class="insight-section">
       <div class="insight-title">
         <span style="color: var(--accent);">⚡</span>
-        Why Per-Unit Visibility Matters
+        <span data-i18n="insightTitle">Why Per-Unit Visibility Matters</span>
       </div>
 
       <div class="gap-indicator" id="gapIndicator">
         <div class="gap-text">
-          <div class="gap-text-label">Difference per unit / month</div>
+          <div class="gap-text-label" data-i18n="gapLabelDiff">Difference per unit / month</div>
           <div class="gap-text-value" id="gapValue">€ —</div>
-          <div class="gap-text-detail" id="gapDetail">What the average hides about this unit</div>
+          <div class="gap-text-detail" id="gapDetail" data-i18n="gapDetailDefault">What the average hides about this unit</div>
         </div>
         <div class="gap-text" style="text-align: right;">
-          <div class="gap-text-label">Annualised</div>
+          <div class="gap-text-label" data-i18n="gapLabelAnnual">Annualised</div>
           <div class="gap-text-value" id="gapAnnual">€ —</div>
-          <div class="gap-text-detail">12-month projection of this difference</div>
+          <div class="gap-text-detail" data-i18n="gapDetailAnnual">12-month projection of this difference</div>
         </div>
       </div>
 
       <ul class="insight-list" id="insightList">
         <li>
           <span class="insight-icon info">i</span>
-          <span>Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
+          <span data-i18n="insightPlaceholder">Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
         </li>
       </ul>
     </div>
@@ -1908,58 +1957,58 @@
     <div class="breakdown-section">
       <div class="insight-title">
         <span style="color: var(--accent);">📊</span>
-        Cost-by-Cost Breakdown
+        <span data-i18n="breakdownTitle">Cost-by-Cost Breakdown</span>
       </div>
 
       <div class="breakdown-table-wrap">
       <table class="breakdown-table">
         <thead>
           <tr>
-            <th>Line item</th>
-            <th class="numeric">Portfolio avg</th>
-            <th class="numeric">This unit</th>
-            <th class="numeric">Difference</th>
+            <th data-i18n="thLineItem">Line item</th>
+            <th class="numeric" data-i18n="thPortfolioAvg">Portfolio avg</th>
+            <th class="numeric" data-i18n="badgeThisUnit">This unit</th>
+            <th class="numeric" data-i18n="thDifference">Difference</th>
           </tr>
         </thead>
         <tbody id="breakdownTableBody">
           <tr class="revenue-row">
-            <td>Monthly revenue</td>
+            <td data-i18n="rowRevenue">Monthly revenue</td>
             <td class="numeric" id="bd_p_revenue">€ —</td>
             <td class="numeric" id="bd_u_revenue">€ —</td>
             <td class="numeric" id="bd_d_revenue">—</td>
           </tr>
           <tr class="cost-row">
-            <td>OTA commission</td>
+            <td data-i18n="rowOta">OTA commission</td>
             <td class="numeric" id="bd_p_ota">€ —</td>
             <td class="numeric" id="bd_u_ota">€ —</td>
             <td class="numeric" id="bd_d_ota">—</td>
           </tr>
           <tr class="cost-row">
-            <td>Owner payout / rent</td>
+            <td data-i18n="rowOwner">Owner payout / rent</td>
             <td class="numeric" id="bd_p_owner">€ —</td>
             <td class="numeric" id="bd_u_owner">€ —</td>
             <td class="numeric" id="bd_d_owner">—</td>
           </tr>
           <tr class="cost-row">
-            <td>Cleaning</td>
+            <td data-i18n="rowCleaning">Cleaning</td>
             <td class="numeric" id="bd_p_cleaning">€ —</td>
             <td class="numeric" id="bd_u_cleaning">€ —</td>
             <td class="numeric" id="bd_d_cleaning">—</td>
           </tr>
           <tr class="cost-row">
-            <td>Local taxes</td>
+            <td data-i18n="rowTaxes">Local taxes</td>
             <td class="numeric" id="bd_p_taxes">€ —</td>
             <td class="numeric" id="bd_u_taxes">€ —</td>
             <td class="numeric" id="bd_d_taxes">—</td>
           </tr>
           <tr class="cost-row">
-            <td>Hidden costs (total)</td>
+            <td data-i18n="rowHidden">Hidden costs (total)</td>
             <td class="numeric" id="bd_p_hidden">€ —</td>
             <td class="numeric" id="bd_u_hidden">€ —</td>
             <td class="numeric" id="bd_d_hidden">—</td>
           </tr>
           <tr class="margin-row">
-            <td>Contribution Margin</td>
+            <td data-i18n="rowMargin">Contribution Margin</td>
             <td class="numeric" id="bd_p_margin">€ —</td>
             <td class="numeric" id="bd_u_margin">€ —</td>
             <td class="numeric" id="bd_d_margin">—</td>
@@ -1968,7 +2017,7 @@
       </table>
       </div>
 
-      <div class="breakdown-cards" id="breakdownCards" aria-label="Cost breakdown by line item"></div>
+      <div class="breakdown-cards" id="breakdownCards" aria-label="Cost breakdown by line item" data-i18n-aria="breakdownCardsAriaLabel"></div>
     </div>
 
     <!-- ============================================================
@@ -1976,18 +2025,18 @@
          ============================================================ -->
     <div class="methodology-cta">
       <div class="methodology-content">
-        <div class="methodology-label">What this means for your operation</div>
-        <h2 class="methodology-title">Your tech stack should reveal this automatically.</h2>
-        <p class="methodology-text">
+        <div class="methodology-label" data-i18n="methodLabel">What this means for your operation</div>
+        <h2 class="methodology-title" data-i18n="methodTitle">Your tech stack should reveal this automatically.</h2>
+        <p class="methodology-text" data-i18n="methodText1">
           Running this analysis manually for one unit is useful. Running it for every unit in your portfolio, every month, is where the real commercial advantage lives. Most operators do not have this visibility because their systems were not designed to surface it. That is the gap between an operation that knows its numbers and one that hopes for the best.
         </p>
-        <p class="methodology-text">
+        <p class="methodology-text" data-i18n="methodText2">
           The operators who build cost transparency into their tech stack make better decisions: which units to keep, which agreements to renegotiate, which channels to invest in, which costs to challenge. The ones who do not, find out too late.
         </p>
         <div class="methodology-actions">
           <a href="https://linkedin.com/in/roger-bisschoff" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.127 0 2.062 2.062 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            Connect on LinkedIn
+            <span data-i18n="methodCta">Connect on LinkedIn</span>
           </a>
         </div>
       </div>
@@ -1997,19 +2046,19 @@
          ACTIONS
          ============================================================ -->
     <div class="action-bar no-print">
-      <button class="btn btn-primary" onclick="calculate()" type="button">Recalculate</button>
-      <button class="btn" onclick="exportResults()" type="button">Copy Summary</button>
-      <button class="btn" onclick="window.print()" type="button">Print / PDF</button>
+      <button class="btn btn-primary" onclick="calculate()" type="button" data-i18n="actRecalculate">Recalculate</button>
+      <button class="btn" onclick="exportResults()" type="button" data-i18n="actCopySummary">Copy Summary</button>
+      <button class="btn" onclick="window.print()" type="button" data-i18n="actPrint">Print / PDF</button>
     </div>
 
   </main>
 
   <div class="framework-attribution">
     <div class="attribution-content">
-      <div class="attribution-text">
+      <div class="attribution-text" data-i18n="attributionText" data-i18n-html>
         <strong>Framework by Roger Bisschoff</strong> · First published 2026 · Part of the Operator Intelligence Suite
       </div>
-      <a href="https://rbisschoff.github.io/operator-intelligence-suite/" class="attribution-link">View the full suite →</a>
+      <a href="https://rbisschoff.github.io/operator-intelligence-suite/" class="attribution-link" data-i18n="attributionLink">View the full suite →</a>
     </div>
   </div>
 
@@ -2017,8 +2066,8 @@
        FOOTER
        ============================================================ -->
   <footer>
-    <p>Part of the <strong>Operator Series</strong> by <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a></p>
-    <p style="margin-top: 8px;">Building cost transparency is the first step to building a profitable operation.</p>
+    <p data-i18n="footerP1" data-i18n-html>Part of the <strong>Operator Series</strong> by <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a></p>
+    <p style="margin-top: 8px;" data-i18n="footerP2">Building cost transparency is the first step to building a profitable operation.</p>
   </footer>
 
   <!-- ============================================================
@@ -2030,24 +2079,429 @@
     let chartUnit = null;
     let animFrames = {};
     let lastNumeric = {};
+    let currentLang = 'en';
 
     const COST_COLORS = {
-      ota: '#C0392B',
-      owner: '#5D6D7E',
-      cleaning: '#E59866',
-      taxes: '#F39C12',
-      hidden: '#7F8C8D',
-      margin: '#1E8449'
+      ota: '#FF3B30',
+      owner: '#8E8E93',
+      cleaning: '#FF9500',
+      taxes: '#AF52DE',
+      hidden: '#AEAEB2',
+      margin: '#34C759'
     };
 
-    const COST_LABELS = [
-      { key: 'ota', label: 'OTA' },
-      { key: 'owner', label: 'Owner' },
-      { key: 'cleaning', label: 'Cleaning' },
-      { key: 'taxes', label: 'Taxes' },
-      { key: 'hidden', label: 'Hidden' },
-      { key: 'margin', label: 'Margin' }
+    const COST_LABEL_KEYS = [
+      { key: 'ota', i18n: 'chartOta' },
+      { key: 'owner', i18n: 'chartOwner' },
+      { key: 'cleaning', i18n: 'chartCleaning' },
+      { key: 'taxes', i18n: 'chartTaxes' },
+      { key: 'hidden', i18n: 'chartHidden' },
+      { key: 'margin', i18n: 'chartMargin' }
     ];
+
+    // ============================================================
+    // I18N
+    // ============================================================
+    const I18N = {
+      en: {
+        brandTitle: 'Contribution Margin Analyser',
+        brandSubtitle: 'Operator Series',
+        resetBtn: 'Reset',
+        shareBtn: 'Share',
+        heroTitle: 'Portfolio averages hide what unit-level analysis reveals.',
+        heroSubtitle: 'Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.',
+        cardPortfolioTitle: 'Portfolio Birdview',
+        badgeAverage: 'Average',
+        secRevenue: 'Revenue',
+        lblUnitsInPortfolio: 'Units in portfolio',
+        lblAvgRevenuePerUnit: 'Avg monthly revenue / unit',
+        secOwnerAgreement: 'Owner Agreement',
+        lblAgreementTypeP: 'Most common agreement type',
+        tipOwnerTypeP: 'Revenue share: owner gets % of net revenue. Fixed rent: owner gets fixed monthly amount. Management fee: you keep the property revenue and pay owner a fee.',
+        tipOwnerTypeU: 'Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.',
+        optRevShare: 'Revenue share (%)',
+        optFixedRent: 'Fixed monthly rent (€)',
+        optMgmtFee: 'Management fee (% to operator)',
+        ownerValueLabelRevShare: 'Owner share (% of net revenue)',
+        ownerValueLabelFixedRent: 'Fixed monthly rent',
+        ownerValueLabelMgmtFee: 'Management fee to operator (%)',
+        secDirectCostsP: 'Direct Costs (monthly avg)',
+        lblOtaShare: 'OTA share',
+        tipOtaShare: '% of bookings coming through OTAs (Booking.com, Airbnb, etc.)',
+        lblOtaCommission: 'Avg OTA commission',
+        lblCleaningMonth: 'Cleaning / month',
+        lblTaxesMonth: 'Local taxes / month',
+        hiddenCostsToggleLabel: '⊕ Hidden costs (optional)',
+        hiddenCostNote: 'These are the costs most operators forget to track but quietly eat margin every month.',
+        lblUtilities: 'Utilities allocation',
+        tipUtilities: 'Electricity, water, gas, particularly if included in guest stays.',
+        lblInternet: 'Internet / cable',
+        lblLinen: 'Linen / consumables',
+        tipLinen: 'Towels, sheets, toiletries, coffee, etc. Often replaced more frequently than budgeted.',
+        lblMaintenance: 'Maintenance reserve',
+        lblInsurance: 'Insurance',
+        lblLocalTeam: 'Local team allocation',
+        tipLocalTeam: 'Cost of cleaning coordinator, maintenance staff, guest communications attributed per unit.',
+        resultLabelPortfolio: 'Portfolio avg monthly margin',
+        toggleShowPercent: 'Show as % of revenue',
+        toggleShowCurrency: 'Show in €',
+        cardUnitTitle: 'Single Unit Deep-Dive',
+        badgeThisUnit: 'This unit',
+        lblUnitRevenue: 'This unit\'s monthly revenue',
+        lblAgreementTypeU: 'This unit\'s agreement type',
+        secDirectCostsU: 'Direct Costs (this unit, monthly)',
+        resultLabelUnit: 'This unit\'s monthly margin',
+        compTitle: 'Cost Composition',
+        compDesc: 'Same revenue, different cost layers: this is what portfolio averages flatten out.',
+        compPortfolioLabel: 'Portfolio average',
+        ariaCompPortfolio: 'Portfolio cost composition chart',
+        ariaCompUnit: 'Unit cost composition chart',
+        insightTitle: 'Why Per-Unit Visibility Matters',
+        gapLabelDiff: 'Difference per unit / month',
+        gapDetailDefault: 'What the average hides about this unit',
+        gapLabelAnnual: 'Annualised',
+        gapDetailAnnual: '12-month projection of this difference',
+        insightPlaceholder: 'Enter values above to see what per-unit analysis reveals beyond the portfolio average.',
+        breakdownTitle: 'Cost-by-Cost Breakdown',
+        thLineItem: 'Line item',
+        thPortfolioAvg: 'Portfolio avg',
+        thDifference: 'Difference',
+        rowRevenue: 'Monthly revenue',
+        rowOta: 'OTA commission',
+        rowOwner: 'Owner payout / rent',
+        rowCleaning: 'Cleaning',
+        rowTaxes: 'Local taxes',
+        rowHidden: 'Hidden costs (total)',
+        rowMargin: 'Contribution Margin',
+        breakdownCardsAriaLabel: 'Cost breakdown by line item',
+        colLabelMargin: 'Net margin',
+        colLabelDefault: 'Portfolio · Unit · Diff',
+        subPortfolio: 'portfolio',
+        subThisUnit: 'this unit',
+        methodLabel: 'What this means for your operation',
+        methodTitle: 'Your tech stack should reveal this automatically.',
+        methodText1: 'Running this analysis manually for one unit is useful. Running it for every unit in your portfolio, every month, is where the real commercial advantage lives. Most operators do not have this visibility because their systems were not designed to surface it. That is the gap between an operation that knows its numbers and one that hopes for the best.',
+        methodText2: 'The operators who build cost transparency into their tech stack make better decisions: which units to keep, which agreements to renegotiate, which channels to invest in, which costs to challenge. The ones who do not, find out too late.',
+        methodCta: 'Connect on LinkedIn',
+        actRecalculate: 'Recalculate',
+        actCopySummary: 'Copy Summary',
+        actPrint: 'Print / PDF',
+        attributionText: '<strong>Framework by Roger Bisschoff</strong> · First published 2026 · Part of the Operator Intelligence Suite',
+        attributionLink: 'View the full suite →',
+        footerP1: 'Part of the <strong>Operator Series</strong> by <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a>',
+        footerP2: 'Building cost transparency is the first step to building a profitable operation.',
+        vsLabel: 'vs',
+        pctOfRevenue: '{pct}% of revenue',
+        perUnitMonth: '{value} per unit / month',
+        chartOta: 'OTA',
+        chartOwner: 'Owner',
+        chartCleaning: 'Cleaning',
+        chartTaxes: 'Taxes',
+        chartHidden: 'Hidden',
+        chartMargin: 'Margin',
+        confirmReset: 'Reset all values to defaults?',
+        alertShareCopied: 'Shareable URL copied to clipboard',
+        alertSummaryCopied: 'Summary copied to clipboard',
+        gapDetailDiffers: 'Each unit has its own cost story. The portfolio average shows none of it.',
+        gapDetailMatches: 'This unit matches the portfolio average. Run the analysis for every unit to find the ones that do not.',
+        directionHigher: 'higher',
+        directionLower: 'lower',
+        insightOwnerCost: '<strong>The owner cost on this unit ({uPct}% of revenue) is different from your portfolio average ({pPct}%).</strong> This is the kind of variation an average hides. Worth understanding why: different agreement terms, different unit type, or simply a relationship that was negotiated at a different moment.',
+        insightCleaning: '<strong>Cleaning cost on this unit is {diff}% {direction} than your portfolio average.</strong> Could be unit size, turnover frequency, or the cleaning arrangement itself. Across a portfolio of twenty or thirty units, these variations add up to meaningful money, but only if you can see them.',
+        insightOta: '<strong>OTA dependency on this unit ({uOta}%) is {direction} than your portfolio average ({pOta}%).</strong> Each unit attracts demand differently. Understanding this per unit lets you decide where to invest in direct demand and where to accept OTA dependency as the cost of doing business.',
+        insightHiddenZero: '<strong>Hidden costs are currently set to zero.</strong> Most operators have utilities, internet, linen, maintenance reserves, and local team costs that quietly eat margin every month. These rarely appear in reporting because they are not tracked per unit. Add them above to see how the picture changes.',
+        insightMarginDiff: '<strong>This unit\'s margin is {direction} than the portfolio average.</strong> The reason matters more than the number. Look at the breakdown below: which cost layers drive the difference? That is where commercial decisions can be made: pricing, channel mix, owner conversations, operational changes.',
+        insightMethodology: '<strong>Now imagine doing this for every unit in your portfolio.</strong> The patterns become visible. Which units are quietly carrying the business, which ones are quietly losing money, which agreements need renegotiation, which channels need rebalancing. This is what cost transparency at scale looks like.',
+        exportSummaryTemplate: 'CONTRIBUTION MARGIN ANALYSIS\nOperator Series · by Roger Bisschoff\n\nPORTFOLIO BIRDVIEW (Avg per unit / month):\n- Revenue: {pRevenue}\n- Total costs: {pTotalCosts}\n- Contribution margin: {pMargin} ({pMarginPct}%)\n\nTHIS UNIT (Monthly):\n- Revenue: {uRevenue}\n- Total costs: {uTotalCosts}\n- Contribution margin: {uMargin} ({uMarginPct}%)\n\nTHE GAP:\n- Difference per unit / month: {gap}\n- Annualised: {gapAnnual}\n\nGenerated by Operator Series Contribution Margin Analyser'
+      },
+      it: {
+        brandTitle: 'Contribution Margin Analyser',
+        brandSubtitle: 'Operator Series',
+        resetBtn: 'Reset',
+        shareBtn: 'Condividi',
+        heroTitle: 'Le medie di portafoglio nascondono ciò che rivela l\'analisi a livello di unità.',
+        heroSubtitle: 'La maggior parte degli operatori guarda le medie di portafoglio e presume che ogni unità contribuisca allo stesso modo. Non è mai così. Questo strumento mostra cosa diventa visibile quando analizzi una singola unità nel dettaglio e la confronti con la tua vista d\'insieme del portafoglio. Il punto non è giudicare l\'unità, ma capire cosa il tuo tech stack dovrebbe rivelare automaticamente, ogni mese, per ogni unità che gestisci.',
+        cardPortfolioTitle: 'Vista d\'insieme del portafoglio',
+        badgeAverage: 'Media',
+        secRevenue: 'Ricavi',
+        lblUnitsInPortfolio: 'Unità nel portafoglio',
+        lblAvgRevenuePerUnit: 'Ricavo medio mensile / unità',
+        secOwnerAgreement: 'Accordo con il proprietario',
+        lblAgreementTypeP: 'Tipo di accordo più comune',
+        tipOwnerTypeP: 'Revenue share: il proprietario riceve una % del ricavo netto. Affitto fisso: il proprietario riceve un importo mensile fisso. Management fee: tieni il ricavo della struttura e paghi una fee al proprietario.',
+        tipOwnerTypeU: 'Ogni unità può avere un accordo diverso con il proprietario. Confronta con la norma di portafoglio per individuare le anomalie.',
+        optRevShare: 'Revenue share (%)',
+        optFixedRent: 'Affitto mensile fisso (€)',
+        optMgmtFee: 'Management fee (% all\'operatore)',
+        ownerValueLabelRevShare: 'Quota proprietario (% del ricavo netto)',
+        ownerValueLabelFixedRent: 'Affitto mensile fisso',
+        ownerValueLabelMgmtFee: 'Management fee all\'operatore (%)',
+        secDirectCostsP: 'Costi diretti (media mensile)',
+        lblOtaShare: 'Quota OTA',
+        tipOtaShare: '% delle prenotazioni che arrivano tramite OTA (Booking.com, Airbnb, ecc.)',
+        lblOtaCommission: 'Commissione OTA media',
+        lblCleaningMonth: 'Pulizie / mese',
+        lblTaxesMonth: 'Tasse locali / mese',
+        hiddenCostsToggleLabel: '⊕ Costi nascosti (opzionale)',
+        hiddenCostNote: 'Questi sono i costi che la maggior parte degli operatori dimentica di tracciare ma che erodono silenziosamente il margine ogni mese.',
+        lblUtilities: 'Allocazione utenze',
+        tipUtilities: 'Elettricità, acqua, gas, soprattutto se incluse nel soggiorno degli ospiti.',
+        lblInternet: 'Internet / TV via cavo',
+        lblLinen: 'Biancheria / materiali di consumo',
+        tipLinen: 'Asciugamani, lenzuola, articoli da bagno, caffè, ecc. Spesso sostituiti più frequentemente di quanto previsto a budget.',
+        lblMaintenance: 'Riserva manutenzione',
+        lblInsurance: 'Assicurazione',
+        lblLocalTeam: 'Allocazione team locale',
+        tipLocalTeam: 'Costo del coordinatore pulizie, personale di manutenzione, comunicazioni con gli ospiti attribuiti per unità.',
+        resultLabelPortfolio: 'Margine medio mensile di portafoglio',
+        toggleShowPercent: 'Mostra come % del ricavo',
+        toggleShowCurrency: 'Mostra in €',
+        cardUnitTitle: 'Approfondimento sulla singola unità',
+        badgeThisUnit: 'Questa unità',
+        lblUnitRevenue: 'Ricavo mensile di questa unità',
+        lblAgreementTypeU: 'Tipo di accordo di questa unità',
+        secDirectCostsU: 'Costi diretti (questa unità, mensile)',
+        resultLabelUnit: 'Margine mensile di questa unità',
+        compTitle: 'Composizione dei costi',
+        compDesc: 'Stesso ricavo, livelli di costo diversi: questo è ciò che le medie di portafoglio appiattiscono.',
+        compPortfolioLabel: 'Media di portafoglio',
+        ariaCompPortfolio: 'Grafico composizione costi del portafoglio',
+        ariaCompUnit: 'Grafico composizione costi dell\'unità',
+        insightTitle: 'Perché la visibilità per unità conta',
+        gapLabelDiff: 'Differenza per unità / mese',
+        gapDetailDefault: 'Ciò che la media nasconde su questa unità',
+        gapLabelAnnual: 'Annualizzata',
+        gapDetailAnnual: 'Proiezione a 12 mesi di questa differenza',
+        insightPlaceholder: 'Inserisci i valori sopra per vedere cosa rivela l\'analisi per unità oltre la media di portafoglio.',
+        breakdownTitle: 'Ripartizione costo per costo',
+        thLineItem: 'Voce',
+        thPortfolioAvg: 'Media portafoglio',
+        thDifference: 'Differenza',
+        rowRevenue: 'Ricavo mensile',
+        rowOta: 'Commissione OTA',
+        rowOwner: 'Payout proprietario / affitto',
+        rowCleaning: 'Pulizie',
+        rowTaxes: 'Tasse locali',
+        rowHidden: 'Costi nascosti (totale)',
+        rowMargin: 'Margine di contribuzione',
+        breakdownCardsAriaLabel: 'Ripartizione dei costi per voce',
+        colLabelMargin: 'Margine netto',
+        colLabelDefault: 'Portafoglio · Unità · Diff',
+        subPortfolio: 'portafoglio',
+        subThisUnit: 'questa unità',
+        methodLabel: 'Cosa significa questo per la tua gestione',
+        methodTitle: 'Il tuo tech stack dovrebbe rivelarlo automaticamente.',
+        methodText1: 'Fare questa analisi manualmente per una unità è utile. Farla per ogni unità del tuo portafoglio, ogni mese, è dove vive il vero vantaggio commerciale. La maggior parte degli operatori non ha questa visibilità perché i loro sistemi non sono stati progettati per farla emergere. Questo è il divario tra un\'operazione che conosce i propri numeri e una che spera per il meglio.',
+        methodText2: 'Gli operatori che integrano la trasparenza sui costi nel loro tech stack prendono decisioni migliori: quali unità mantenere, quali accordi rinegoziare, in quali canali investire, quali costi contestare. Chi non lo fa, lo scopre troppo tardi.',
+        methodCta: 'Connettiti su LinkedIn',
+        actRecalculate: 'Ricalcola',
+        actCopySummary: 'Copia riepilogo',
+        actPrint: 'Stampa / PDF',
+        attributionText: '<strong>Framework di Roger Bisschoff</strong> · Pubblicato per la prima volta nel 2026 · Parte della Operator Intelligence Suite',
+        attributionLink: 'Vedi la suite completa →',
+        footerP1: 'Parte della <strong>Operator Series</strong> di <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a>',
+        footerP2: 'Costruire trasparenza sui costi è il primo passo per costruire un\'operazione profittevole.',
+        vsLabel: 'vs',
+        pctOfRevenue: '{pct}% del ricavo',
+        perUnitMonth: '{value} per unità / mese',
+        chartOta: 'OTA',
+        chartOwner: 'Proprietario',
+        chartCleaning: 'Pulizie',
+        chartTaxes: 'Tasse',
+        chartHidden: 'Nascosti',
+        chartMargin: 'Margine',
+        confirmReset: 'Ripristinare tutti i valori predefiniti?',
+        alertShareCopied: 'URL condivisibile copiato negli appunti',
+        alertSummaryCopied: 'Riepilogo copiato negli appunti',
+        gapDetailDiffers: 'Ogni unità ha la sua storia di costi. La media di portafoglio non ne mostra nessuna.',
+        gapDetailMatches: 'Questa unità corrisponde alla media di portafoglio. Esegui l\'analisi su ogni unità per trovare quelle che non lo fanno.',
+        directionHigher: 'più alto',
+        directionLower: 'più basso',
+        insightOwnerCost: '<strong>Il costo del proprietario su questa unità ({uPct}% del ricavo) è diverso dalla tua media di portafoglio ({pPct}%).</strong> Questo è il tipo di variazione che una media nasconde. Vale la pena capire perché: termini di accordo diversi, tipo di unità diverso, o semplicemente una relazione negoziata in un momento diverso.',
+        insightCleaning: '<strong>Il costo di pulizia su questa unità è {diff}% {direction} della tua media di portafoglio.</strong> Potrebbe essere la dimensione dell\'unità, la frequenza di turnover, o l\'accordo di pulizia stesso. Su un portafoglio di venti o trenta unità, queste variazioni si accumulano in cifre significative, ma solo se riesci a vederle.',
+        insightOta: '<strong>La dipendenza da OTA su questa unità ({uOta}%) è {direction} della tua media di portafoglio ({pOta}%).</strong> Ogni unità attrae la domanda in modo diverso. Capire questo per unità ti permette di decidere dove investire nella domanda diretta e dove accettare la dipendenza OTA come costo del fare impresa.',
+        insightHiddenZero: '<strong>I costi nascosti sono attualmente impostati a zero.</strong> La maggior parte degli operatori ha costi di utenze, internet, biancheria, riserve di manutenzione e team locale che erodono silenziosamente il margine ogni mese. Raramente compaiono nel reporting perché non sono tracciati per unità. Aggiungili sopra per vedere come cambia il quadro.',
+        insightMarginDiff: '<strong>Il margine di questa unità è {direction} della media di portafoglio.</strong> Il motivo conta più del numero. Guarda la ripartizione sotto: quali livelli di costo determinano la differenza? È lì che si possono prendere decisioni commerciali: prezzi, mix di canali, conversazioni con il proprietario, cambiamenti operativi.',
+        insightMethodology: '<strong>Ora immagina di fare questo per ogni unità del tuo portafoglio.</strong> I pattern diventano visibili. Quali unità sostengono silenziosamente il business, quali perdono silenziosamente denaro, quali accordi vanno rinegoziati, quali canali vanno riequilibrati. Questo è cosa significa trasparenza sui costi su scala.',
+        exportSummaryTemplate: 'ANALISI DEL MARGINE DI CONTRIBUZIONE\nOperator Series · di Roger Bisschoff\n\nVISTA D\'INSIEME DEL PORTAFOGLIO (Media per unità / mese):\n- Ricavo: {pRevenue}\n- Costi totali: {pTotalCosts}\n- Margine di contribuzione: {pMargin} ({pMarginPct}%)\n\nQUESTA UNITÀ (Mensile):\n- Ricavo: {uRevenue}\n- Costi totali: {uTotalCosts}\n- Margine di contribuzione: {uMargin} ({uMarginPct}%)\n\nIL DIVARIO:\n- Differenza per unità / mese: {gap}\n- Annualizzata: {gapAnnual}\n\nGenerato da Operator Series Contribution Margin Analyser'
+      },
+      de: {
+        brandTitle: 'Contribution Margin Analyser',
+        brandSubtitle: 'Operator Series',
+        resetBtn: 'Zurücksetzen',
+        shareBtn: 'Teilen',
+        heroTitle: 'Portfolio-Durchschnitte verbergen, was die Analyse auf Unit-Ebene zeigt.',
+        heroSubtitle: 'Die meisten Betreiber schauen auf Portfolio-Durchschnitte und nehmen an, dass jede Unit gleich viel beiträgt. Das stimmt nie. Dieses Tool zeigt, was sichtbar wird, wenn Sie eine einzelne Unit im Detail analysieren und mit Ihrer Portfolio-Übersicht vergleichen. Es geht nicht darum, die Unit zu bewerten. Es geht darum zu verstehen, was Ihr Tech-Stack automatisch aufzeigen sollte, jeden Monat, für jede Unit, die Sie betreiben.',
+        cardPortfolioTitle: 'Portfolio-Übersicht',
+        badgeAverage: 'Durchschnitt',
+        secRevenue: 'Umsatz',
+        lblUnitsInPortfolio: 'Units im Portfolio',
+        lblAvgRevenuePerUnit: 'Durchschn. Monatsumsatz / Unit',
+        secOwnerAgreement: 'Eigentümervereinbarung',
+        lblAgreementTypeP: 'Häufigster Vereinbarungstyp',
+        tipOwnerTypeP: 'Revenue Share: Eigentümer erhält % des Nettoumsatzes. Fixmiete: Eigentümer erhält einen festen Monatsbetrag. Management Fee: Sie behalten den Umsatz und zahlen dem Eigentümer eine Fee.',
+        tipOwnerTypeU: 'Jede Unit kann eine andere Eigentümervereinbarung haben. Vergleichen Sie mit der Portfolio-Norm, um Ausreißer zu erkennen.',
+        optRevShare: 'Revenue Share (%)',
+        optFixedRent: 'Feste Monatsmiete (€)',
+        optMgmtFee: 'Management Fee (% an den Betreiber)',
+        ownerValueLabelRevShare: 'Eigentümeranteil (% vom Nettoumsatz)',
+        ownerValueLabelFixedRent: 'Feste Monatsmiete',
+        ownerValueLabelMgmtFee: 'Management Fee an den Betreiber (%)',
+        secDirectCostsP: 'Direkte Kosten (Monatsdurchschnitt)',
+        lblOtaShare: 'OTA-Anteil',
+        tipOtaShare: '% der Buchungen über OTAs (Booking.com, Airbnb usw.)',
+        lblOtaCommission: 'Durchschn. OTA-Provision',
+        lblCleaningMonth: 'Reinigung / Monat',
+        lblTaxesMonth: 'Lokale Steuern / Monat',
+        hiddenCostsToggleLabel: '⊕ Versteckte Kosten (optional)',
+        hiddenCostNote: 'Das sind die Kosten, die die meisten Betreiber zu erfassen vergessen, die aber jeden Monat still die Marge auffressen.',
+        lblUtilities: 'Nebenkosten-Zuordnung',
+        tipUtilities: 'Strom, Wasser, Gas, besonders wenn im Gastaufenthalt enthalten.',
+        lblInternet: 'Internet / Kabel',
+        lblLinen: 'Wäsche / Verbrauchsmaterial',
+        tipLinen: 'Handtücher, Bettwäsche, Toilettenartikel, Kaffee usw. Werden oft häufiger ersetzt als budgetiert.',
+        lblMaintenance: 'Wartungsrücklage',
+        lblInsurance: 'Versicherung',
+        lblLocalTeam: 'Zuordnung lokales Team',
+        tipLocalTeam: 'Kosten für Reinigungskoordinator, Wartungspersonal, Gästekommunikation, zugeordnet pro Unit.',
+        resultLabelPortfolio: 'Durchschn. monatliche Portfolio-Marge',
+        toggleShowPercent: 'Als % vom Umsatz anzeigen',
+        toggleShowCurrency: 'In € anzeigen',
+        cardUnitTitle: 'Einzel-Unit-Analyse',
+        badgeThisUnit: 'Diese Unit',
+        lblUnitRevenue: 'Monatsumsatz dieser Unit',
+        lblAgreementTypeU: 'Vereinbarungstyp dieser Unit',
+        secDirectCostsU: 'Direkte Kosten (diese Unit, monatlich)',
+        resultLabelUnit: 'Monatliche Marge dieser Unit',
+        compTitle: 'Kostenzusammensetzung',
+        compDesc: 'Gleicher Umsatz, unterschiedliche Kostenebenen: Das ist es, was Portfolio-Durchschnitte einebnen.',
+        compPortfolioLabel: 'Portfolio-Durchschnitt',
+        ariaCompPortfolio: 'Diagramm Kostenzusammensetzung Portfolio',
+        ariaCompUnit: 'Diagramm Kostenzusammensetzung Unit',
+        insightTitle: 'Warum Sichtbarkeit pro Unit wichtig ist',
+        gapLabelDiff: 'Differenz pro Unit / Monat',
+        gapDetailDefault: 'Was der Durchschnitt bei dieser Unit verbirgt',
+        gapLabelAnnual: 'Annualisiert',
+        gapDetailAnnual: '12-Monats-Projektion dieser Differenz',
+        insightPlaceholder: 'Geben Sie oben Werte ein, um zu sehen, was die Analyse pro Unit über den Portfolio-Durchschnitt hinaus zeigt.',
+        breakdownTitle: 'Kosten-für-Kosten-Aufschlüsselung',
+        thLineItem: 'Posten',
+        thPortfolioAvg: 'Portfolio-Durchschnitt',
+        thDifference: 'Differenz',
+        rowRevenue: 'Monatsumsatz',
+        rowOta: 'OTA-Provision',
+        rowOwner: 'Eigentümerauszahlung / Miete',
+        rowCleaning: 'Reinigung',
+        rowTaxes: 'Lokale Steuern',
+        rowHidden: 'Versteckte Kosten (gesamt)',
+        rowMargin: 'Deckungsbeitrag',
+        breakdownCardsAriaLabel: 'Kostenaufschlüsselung nach Posten',
+        colLabelMargin: 'Nettomarge',
+        colLabelDefault: 'Portfolio · Unit · Diff',
+        subPortfolio: 'Portfolio',
+        subThisUnit: 'diese Unit',
+        methodLabel: 'Was das für Ihren Betrieb bedeutet',
+        methodTitle: 'Ihr Tech-Stack sollte das automatisch zeigen.',
+        methodText1: 'Diese Analyse manuell für eine Unit durchzuführen ist nützlich. Sie für jede Unit in Ihrem Portfolio, jeden Monat, durchzuführen, ist dort, wo der eigentliche kommerzielle Vorteil liegt. Die meisten Betreiber haben diese Sichtbarkeit nicht, weil ihre Systeme nicht dafür konzipiert wurden, sie sichtbar zu machen. Das ist die Lücke zwischen einem Betrieb, der seine Zahlen kennt, und einem, der auf das Beste hofft.',
+        methodText2: 'Die Betreiber, die Kostentransparenz in ihren Tech-Stack einbauen, treffen bessere Entscheidungen: welche Units behalten, welche Vereinbarungen neu verhandeln, in welche Kanäle investieren, welche Kosten hinterfragen. Wer das nicht tut, erfährt es zu spät.',
+        methodCta: 'Auf LinkedIn vernetzen',
+        actRecalculate: 'Neu berechnen',
+        actCopySummary: 'Zusammenfassung kopieren',
+        actPrint: 'Drucken / PDF',
+        attributionText: '<strong>Framework von Roger Bisschoff</strong> · Erstveröffentlichung 2026 · Teil der Operator Intelligence Suite',
+        attributionLink: 'Die ganze Suite ansehen →',
+        footerP1: 'Teil der <strong>Operator Series</strong> von <a href="https://linkedin.com/in/roger-bisschoff" target="_blank">Roger Bisschoff</a>',
+        footerP2: 'Kostentransparenz aufzubauen ist der erste Schritt zu einem profitablen Betrieb.',
+        vsLabel: 'vs',
+        pctOfRevenue: '{pct}% vom Umsatz',
+        perUnitMonth: '{value} pro Unit / Monat',
+        chartOta: 'OTA',
+        chartOwner: 'Eigentümer',
+        chartCleaning: 'Reinigung',
+        chartTaxes: 'Steuern',
+        chartHidden: 'Versteckt',
+        chartMargin: 'Marge',
+        confirmReset: 'Alle Werte auf Standard zurücksetzen?',
+        alertShareCopied: 'Teilbare URL in die Zwischenablage kopiert',
+        alertSummaryCopied: 'Zusammenfassung in die Zwischenablage kopiert',
+        gapDetailDiffers: 'Jede Unit hat ihre eigene Kostengeschichte. Der Portfolio-Durchschnitt zeigt nichts davon.',
+        gapDetailMatches: 'Diese Unit entspricht dem Portfolio-Durchschnitt. Führen Sie die Analyse für jede Unit durch, um die zu finden, die es nicht tun.',
+        directionHigher: 'höher',
+        directionLower: 'niedriger',
+        insightOwnerCost: '<strong>Die Eigentümerkosten dieser Unit ({uPct}% vom Umsatz) unterscheiden sich von Ihrem Portfolio-Durchschnitt ({pPct}%).</strong> Das ist die Art von Abweichung, die ein Durchschnitt verbirgt. Es lohnt sich zu verstehen, warum: andere Vertragsbedingungen, anderer Unit-Typ, oder einfach eine Beziehung, die zu einem anderen Zeitpunkt verhandelt wurde.',
+        insightCleaning: '<strong>Die Reinigungskosten dieser Unit sind {diff}% {direction} als Ihr Portfolio-Durchschnitt.</strong> Könnte an der Unit-Größe, der Wechselhäufigkeit oder der Reinigungsvereinbarung selbst liegen. Über ein Portfolio von zwanzig oder dreißig Units summieren sich diese Abweichungen zu relevantem Geld, aber nur, wenn Sie sie sehen können.',
+        insightOta: '<strong>Die OTA-Abhängigkeit dieser Unit ({uOta}%) ist {direction} als Ihr Portfolio-Durchschnitt ({pOta}%).</strong> Jede Unit zieht Nachfrage unterschiedlich an. Das pro Unit zu verstehen, lässt Sie entscheiden, wo Sie in Direktnachfrage investieren und wo Sie OTA-Abhängigkeit als Preis des Geschäfts akzeptieren.',
+        insightHiddenZero: '<strong>Versteckte Kosten sind derzeit auf null gesetzt.</strong> Die meisten Betreiber haben Nebenkosten, Internet, Wäsche, Wartungsrücklagen und lokale Teamkosten, die jeden Monat still die Marge auffressen. Sie erscheinen selten im Reporting, weil sie nicht pro Unit erfasst werden. Fügen Sie sie oben hinzu, um zu sehen, wie sich das Bild ändert.',
+        insightMarginDiff: '<strong>Die Marge dieser Unit ist {direction} als der Portfolio-Durchschnitt.</strong> Der Grund zählt mehr als die Zahl. Schauen Sie sich die Aufschlüsselung unten an: welche Kostenebenen treiben den Unterschied? Dort lassen sich kommerzielle Entscheidungen treffen: Preisgestaltung, Kanalmix, Eigentümergespräche, betriebliche Änderungen.',
+        insightMethodology: '<strong>Stellen Sie sich vor, Sie tun das für jede Unit in Ihrem Portfolio.</strong> Die Muster werden sichtbar. Welche Units tragen still das Geschäft, welche verlieren still Geld, welche Vereinbarungen müssen neu verhandelt werden, welche Kanäle müssen neu ausgerichtet werden. Das ist, wie Kostentransparenz im großen Maßstab aussieht.',
+        exportSummaryTemplate: 'ANALYSE DES DECKUNGSBEITRAGS\nOperator Series · von Roger Bisschoff\n\nPORTFOLIO-ÜBERSICHT (Durchschn. pro Unit / Monat):\n- Umsatz: {pRevenue}\n- Gesamtkosten: {pTotalCosts}\n- Deckungsbeitrag: {pMargin} ({pMarginPct}%)\n\nDIESE UNIT (Monatlich):\n- Umsatz: {uRevenue}\n- Gesamtkosten: {uTotalCosts}\n- Deckungsbeitrag: {uMargin} ({uMarginPct}%)\n\nDIE LÜCKE:\n- Differenz pro Unit / Monat: {gap}\n- Annualisiert: {gapAnnual}\n\nErstellt von Operator Series Contribution Margin Analyser'
+      }
+    };
+
+    function t(key, vars) {
+      const pack = I18N[currentLang] || I18N.en;
+      let str = pack[key];
+      if (str == null) str = (I18N.en[key] != null ? I18N.en[key] : key);
+      if (vars) {
+        Object.keys(vars).forEach(function(k) {
+          str = str.split('{' + k + '}').join(vars[k]);
+        });
+      }
+      return str;
+    }
+
+    function applyLang(lang) {
+      currentLang = I18N[lang] ? lang : 'en';
+      document.documentElement.lang = currentLang;
+      const pack = I18N[currentLang];
+
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        const key = el.getAttribute('data-i18n');
+        if (pack[key] == null) return;
+        if (el.hasAttribute('data-i18n-html')) el.innerHTML = pack[key];
+        else el.textContent = pack[key];
+      });
+
+      document.querySelectorAll('[data-i18n-tip]').forEach(function(el) {
+        const key = el.getAttribute('data-i18n-tip');
+        if (pack[key] == null) return;
+        el.setAttribute('data-tip', pack[key]);
+        el.setAttribute('aria-label', pack[key]);
+      });
+
+      document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
+        const key = el.getAttribute('data-i18n-aria');
+        if (pack[key] == null) return;
+        el.setAttribute('aria-label', pack[key]);
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        const on = btn.getAttribute('data-lang') === currentLang;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      try { localStorage.setItem('ois-lang', currentLang); } catch (e) {}
+
+      refreshOwnerLabels();
+      ['p', 'u'].forEach(function(prefix) {
+        const toggleEl = document.getElementById(`${prefix}_toggleText`);
+        if (toggleEl) toggleEl.textContent = resultMode[prefix] === 'currency' ? t('toggleShowPercent') : t('toggleShowCurrency');
+      });
+
+      calculate();
+    }
+
+    function refreshOwnerLabels() {
+      ['p', 'u'].forEach(function(prefix) {
+        const type = document.getElementById(`${prefix}_ownerType`).value;
+        const label = document.getElementById(`${prefix}_ownerValueLabel`);
+        if (!label) return;
+        if (type === 'revShare') label.textContent = t('ownerValueLabelRevShare');
+        else if (type === 'fixedRent') label.textContent = t('ownerValueLabelFixedRent');
+        else if (type === 'mgmtFee') label.textContent = t('ownerValueLabelMgmtFee');
+      });
+    }
 
     // ============================================================
     // INPUT MANAGEMENT
@@ -2060,21 +2514,21 @@
       const input = document.getElementById(`${prefix}_ownerValue`);
 
       if (type === 'revShare') {
-        label.textContent = 'Owner share (% of net revenue)';
+        label.textContent = t('ownerValueLabelRevShare');
         suffix.style.display = 'inline';
         prefixEl.style.display = 'none';
         input.classList.add('with-suffix');
         input.classList.add('no-prefix');
         input.value = prefix === 'p' ? 70 : 75;
       } else if (type === 'fixedRent') {
-        label.textContent = 'Fixed monthly rent';
+        label.textContent = t('ownerValueLabelFixedRent');
         suffix.style.display = 'none';
         prefixEl.style.display = 'inline';
         input.classList.remove('with-suffix');
         input.classList.remove('no-prefix');
         input.value = prefix === 'p' ? 1800 : 2200;
       } else if (type === 'mgmtFee') {
-        label.textContent = 'Management fee to operator (%)';
+        label.textContent = t('ownerValueLabelMgmtFee');
         suffix.style.display = 'inline';
         prefixEl.style.display = 'none';
         input.classList.add('with-suffix');
@@ -2097,7 +2551,7 @@
       resultMode[prefix] = resultMode[prefix] === 'currency' ? 'percent' : 'currency';
       lastNumeric[prefix] = null;
       document.getElementById(`${prefix}_toggleText`).textContent = 
-        resultMode[prefix] === 'currency' ? 'Show as % of revenue' : 'Show in €';
+        resultMode[prefix] === 'currency' ? t('toggleShowPercent') : t('toggleShowCurrency');
       calculate();
     }
 
@@ -2221,10 +2675,10 @@
 
       if (resultMode[prefix] === 'currency') {
         animateCount(valueEl, r.margin, v => formatEuro(v), prefix);
-        detailEl.textContent = `${r.marginPercent.toFixed(1)}% of revenue`;
+        detailEl.textContent = t('pctOfRevenue', { pct: r.marginPercent.toFixed(1) });
       } else {
         animateCount(valueEl, r.marginPercent, v => `${v.toFixed(1)}%`, prefix);
-        detailEl.textContent = `${formatEuro(r.margin)} per unit / month`;
+        detailEl.textContent = t('perUnitMonth', { value: formatEuro(r.margin) });
       }
     }
 
@@ -2260,22 +2714,22 @@
 
     function updateBreakdownCards(p, u) {
       const rows = [
-        { label: 'Monthly revenue', p: p.revenue, u: u.revenue, delta: u.revenue - p.revenue, good: true, isMargin: false },
-        { label: 'OTA commission', p: p.ota, u: u.ota, delta: u.ota - p.ota, good: false, isMargin: false },
-        { label: 'Owner payout / rent', p: p.owner, u: u.owner, delta: u.owner - p.owner, good: false, isMargin: false },
-        { label: 'Cleaning', p: p.cleaning, u: u.cleaning, delta: u.cleaning - p.cleaning, good: false, isMargin: false },
-        { label: 'Local taxes', p: p.taxes, u: u.taxes, delta: u.taxes - p.taxes, good: false, isMargin: false },
-        { label: 'Hidden costs (total)', p: p.hidden, u: u.hidden, delta: u.hidden - p.hidden, good: false, isMargin: false },
-        { label: 'Contribution Margin', p: p.margin, u: u.margin, delta: u.margin - p.margin, good: true, isMargin: true }
+        { label: t('rowRevenue'), p: p.revenue, u: u.revenue, delta: u.revenue - p.revenue, good: true, isMargin: false },
+        { label: t('rowOta'), p: p.ota, u: u.ota, delta: u.ota - p.ota, good: false, isMargin: false },
+        { label: t('rowOwner'), p: p.owner, u: u.owner, delta: u.owner - p.owner, good: false, isMargin: false },
+        { label: t('rowCleaning'), p: p.cleaning, u: u.cleaning, delta: u.cleaning - p.cleaning, good: false, isMargin: false },
+        { label: t('rowTaxes'), p: p.taxes, u: u.taxes, delta: u.taxes - p.taxes, good: false, isMargin: false },
+        { label: t('rowHidden'), p: p.hidden, u: u.hidden, delta: u.hidden - p.hidden, good: false, isMargin: false },
+        { label: t('rowMargin'), p: p.margin, u: u.margin, delta: u.margin - p.margin, good: true, isMargin: true }
       ];
       document.getElementById('breakdownCards').innerHTML = rows.map(row => `
         <div class="breakdown-card">
           <div class="breakdown-card-label">${row.label}</div>
           <div class="breakdown-card-row${row.isMargin ? ' is-margin' : ''}">
-            <span class="col-label">${row.isMargin ? 'Net margin' : 'Portfolio · Unit · Diff'}</span>
+            <span class="col-label">${row.isMargin ? t('colLabelMargin') : t('colLabelDefault')}</span>
             <span class="col-values">
-              <span>${formatEuro(row.p)} <span class="sub">portfolio</span></span>
-              <span>${formatEuro(row.u)} <span class="sub">this unit</span></span>
+              <span>${formatEuro(row.p)} <span class="sub">${t('subPortfolio')}</span></span>
+              <span>${formatEuro(row.u)} <span class="sub">${t('subThisUnit')}</span></span>
               <span>${formatDelta(row.delta, row.good)}</span>
             </span>
           </div>
@@ -2300,8 +2754,8 @@
         Math.max(0, result.margin)
       ];
       const total = values.reduce((a, b) => a + b, 0) || 1;
-      const labels = COST_LABELS.map((c, i) => c.label);
-      const colors = COST_LABELS.map(c => COST_COLORS[c.key]);
+      const labels = COST_LABEL_KEYS.map(c => t(c.i18n));
+      const colors = COST_LABEL_KEYS.map(c => COST_COLORS[c.key]);
 
       if (existingChart) existingChart.destroy();
       const chart = new Chart(ctx, {
@@ -2334,9 +2788,9 @@
       });
       setChart(chart);
 
-      document.getElementById(legendId).innerHTML = COST_LABELS.map((c, i) => {
+      document.getElementById(legendId).innerHTML = COST_LABEL_KEYS.map((c, i) => {
         const pct = ((values[i] / total) * 100).toFixed(0);
-        return `<span><i style="background:${COST_COLORS[c.key]}"></i>${c.label} ${pct}%</span>`;
+        return `<span><i style="background:${COST_COLORS[c.key]}"></i>${t(c.i18n)} ${pct}%</span>`;
       }).join('');
     }
 
@@ -2363,10 +2817,10 @@
       
       let detail = '';
       if (gap !== 0) {
-        detail = 'Each unit has its own cost story. The portfolio average shows none of it.';
+        detail = t('gapDetailDiffers');
         document.getElementById('gapValue').style.color = 'var(--accent-dark)';
       } else {
-        detail = 'This unit matches the portfolio average. Run the analysis for every unit to find the ones that do not.';
+        detail = t('gapDetailMatches');
         document.getElementById('gapValue').style.color = 'var(--accent-dark)';
       }
       document.getElementById('gapDetail').textContent = detail;
@@ -2392,28 +2846,28 @@
         insights.push({
           type: 'info',
           icon: 'i',
-          text: `<strong>The owner cost on this unit (${uOwnerPct.toFixed(1)}% of revenue) is different from your portfolio average (${pOwnerPct.toFixed(1)}%).</strong> This is the kind of variation an average hides. Worth understanding why: different agreement terms, different unit type, or simply a relationship that was negotiated at a different moment.`
+          text: t('insightOwnerCost', { uPct: uOwnerPct.toFixed(1), pPct: pOwnerPct.toFixed(1) })
         });
       }
 
       // Cleaning cost difference - educational framing
       if (p.cleaning > 0 && Math.abs(u.cleaning - p.cleaning) / p.cleaning > 0.20) {
         const diff = ((u.cleaning - p.cleaning) / p.cleaning * 100).toFixed(0);
-        const direction = u.cleaning > p.cleaning ? 'higher' : 'lower';
+        const direction = u.cleaning > p.cleaning ? t('directionHigher') : t('directionLower');
         insights.push({
           type: 'info',
           icon: 'i',
-          text: `<strong>Cleaning cost on this unit is ${Math.abs(diff)}% ${direction} than your portfolio average.</strong> Could be unit size, turnover frequency, or the cleaning arrangement itself. Across a portfolio of twenty or thirty units, these variations add up to meaningful money — but only if you can see them.`
+          text: t('insightCleaning', { diff: Math.abs(diff), direction: direction })
         });
       }
 
       // OTA dependency - educational framing
       if (Math.abs(uIn.otaShare - pIn.otaShare) > 8) {
-        const direction = uIn.otaShare > pIn.otaShare ? 'higher' : 'lower';
+        const direction = uIn.otaShare > pIn.otaShare ? t('directionHigher') : t('directionLower');
         insights.push({
           type: 'info',
           icon: 'i',
-          text: `<strong>OTA dependency on this unit (${uIn.otaShare}%) is ${direction} than your portfolio average (${pIn.otaShare}%).</strong> Each unit attracts demand differently. Understanding this per unit lets you decide where to invest in direct demand and where to accept OTA dependency as the cost of doing business.`
+          text: t('insightOta', { uOta: uIn.otaShare, direction: direction, pOta: pIn.otaShare })
         });
       }
 
@@ -2422,17 +2876,17 @@
         insights.push({
           type: 'warning',
           icon: '⚠',
-          text: '<strong>Hidden costs are currently set to zero.</strong> Most operators have utilities, internet, linen, maintenance reserves, and local team costs that quietly eat margin every month. These rarely appear in reporting because they are not tracked per unit. Add them above to see how the picture changes.'
+          text: t('insightHiddenZero')
         });
       }
 
       // Margin difference - reframed as data point, not judgment
       if (Math.abs(u.marginPercent - p.marginPercent) > 5) {
-        const direction = u.marginPercent > p.marginPercent ? 'higher' : 'lower';
+        const direction = u.marginPercent > p.marginPercent ? t('directionHigher') : t('directionLower');
         insights.push({
           type: 'info',
           icon: 'i',
-          text: `<strong>This unit's margin is ${direction} than the portfolio average.</strong> The reason matters more than the number. Look at the breakdown below: which cost layers drive the difference? That is where commercial decisions can be made — pricing, channel mix, owner conversations, operational changes.`
+          text: t('insightMarginDiff', { direction: direction })
         });
       }
 
@@ -2440,7 +2894,7 @@
       insights.push({
         type: 'info',
         icon: '→',
-        text: '<strong>Now imagine doing this for every unit in your portfolio.</strong> The patterns become visible. Which units are quietly carrying the business, which ones are quietly losing money, which agreements need renegotiation, which channels need rebalancing. This is what cost transparency at scale looks like.'
+        text: t('insightMethodology')
       });
 
       return insights;
@@ -2478,7 +2932,7 @@
     }
 
     function resetForm() {
-      if (confirm('Reset all values to defaults?')) {
+      if (confirm(t('confirmReset'))) {
         localStorage.removeItem('cma-v2-state');
         location.reload();
       }
@@ -2492,7 +2946,7 @@
       const params = new URLSearchParams(state).toString();
       const url = window.location.origin + window.location.pathname + '#' + params;
       navigator.clipboard.writeText(url).then(() => {
-        alert('Shareable URL copied to clipboard');
+        alert(t('alertShareCopied'));
       });
     }
 
@@ -2502,28 +2956,22 @@
       const pResult = calculateMargin(pInputs);
       const uResult = calculateMargin(uInputs);
       const gap = uResult.margin - pResult.margin;
-      
-      const summary = `CONTRIBUTION MARGIN ANALYSIS
-Operator Series — by Roger Bisschoff
 
-PORTFOLIO BIRDVIEW (Avg per unit / month):
-- Revenue: ${formatEuro(pResult.revenue)}
-- Total costs: ${formatEuro(pResult.totalCosts)}
-- Contribution margin: ${formatEuro(pResult.margin)} (${pResult.marginPercent.toFixed(1)}%)
-
-THIS UNIT (Monthly):
-- Revenue: ${formatEuro(uResult.revenue)}
-- Total costs: ${formatEuro(uResult.totalCosts)}
-- Contribution margin: ${formatEuro(uResult.margin)} (${uResult.marginPercent.toFixed(1)}%)
-
-THE GAP:
-- Difference per unit / month: ${formatEuro(gap)}
-- Annualised: ${formatEuro(gap * 12)}
-
-Generated by Operator Series Contribution Margin Analyser`;
+      const summary = t('exportSummaryTemplate', {
+        pRevenue: formatEuro(pResult.revenue),
+        pTotalCosts: formatEuro(pResult.totalCosts),
+        pMargin: formatEuro(pResult.margin),
+        pMarginPct: pResult.marginPercent.toFixed(1),
+        uRevenue: formatEuro(uResult.revenue),
+        uTotalCosts: formatEuro(uResult.totalCosts),
+        uMargin: formatEuro(uResult.margin),
+        uMarginPct: uResult.marginPercent.toFixed(1),
+        gap: formatEuro(gap),
+        gapAnnual: formatEuro(gap * 12)
+      });
 
       navigator.clipboard.writeText(summary).then(() => {
-        alert('Summary copied to clipboard');
+        alert(t('alertSummaryCopied'));
       });
     }
 
@@ -2549,7 +2997,7 @@ Generated by Operator Series Contribution Margin Analyser`;
         tip.addEventListener('click', e => {
           e.stopPropagation();
           const open = tip.classList.contains('active');
-          document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.info-tip.active').forEach(other => other.classList.remove('active'));
           if (!open) tip.classList.add('active');
         });
         tip.addEventListener('keydown', e => {
@@ -2560,7 +3008,7 @@ Generated by Operator Series Contribution Margin Analyser`;
         });
       });
       document.addEventListener('click', () => {
-        document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.info-tip.active').forEach(other => other.classList.remove('active'));
       });
     }
 
@@ -2575,6 +3023,17 @@ Generated by Operator Series Contribution Margin Analyser`;
       document.querySelectorAll('input, select').forEach(input => {
         input.addEventListener('input', calculate);
       });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
+      });
+
+      let startLang = 'en';
+      try {
+        const saved = localStorage.getItem('ois-lang');
+        if (saved && I18N[saved]) startLang = saved;
+      } catch (e) {}
+      applyLang(startLang);
     });
   </script>
 
