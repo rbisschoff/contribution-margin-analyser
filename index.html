@@ -4,12 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Contribution Margin Analyser — Operator Series</title>
-  <meta name="description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs. Build cost transparency. Part of the Operator Series.">
+  <meta name="description" data-i18n-meta="description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs. Build cost transparency. Part of the Operator Series.">
+  <link rel="alternate" hreflang="en" href="https://rbisschoff.github.io/contribution-margin-analyser/?lang=en">
+  <link rel="alternate" hreflang="it" href="https://rbisschoff.github.io/contribution-margin-analyser/?lang=it">
+  <link rel="alternate" hreflang="de" href="https://rbisschoff.github.io/contribution-margin-analyser/?lang=de">
+  <link rel="alternate" hreflang="x-default" href="https://rbisschoff.github.io/contribution-margin-analyser/?lang=en">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="Contribution Margin Analyser — Operator Series">
-  <meta property="og:description" content="Compare portfolio average vs single unit contribution margin. Find hidden costs.">
+  <meta property="og:title" data-i18n-meta="ogTitle" content="Contribution Margin Analyser — Operator Series">
+  <meta property="og:description" data-i18n-meta="ogDescription" content="Compare portfolio average vs single unit contribution margin. Find hidden costs.">
   <meta property="og:type" content="website">
+
+  <script>
+    (function () {
+      const supported = ['en', 'it', 'de'];
+      const queryValue = new URLSearchParams(window.location.search).get('lang');
+      let lang;
+      if (queryValue !== null) {
+        lang = supported.includes(queryValue.toLowerCase()) ? queryValue.toLowerCase() : 'en';
+      } else {
+        try { lang = localStorage.getItem('ois-lang'); } catch (e) {}
+        if (!supported.includes(lang)) {
+          const browserLang = (navigator.language || '').slice(0, 2).toLowerCase();
+          lang = supported.includes(browserLang) ? browserLang : 'en';
+        }
+      }
+      document.documentElement.lang = lang;
+      window.__oisInitialLang = lang;
+      try { localStorage.setItem('ois-lang', lang); } catch (e) {}
+      const metadata = {
+        en: {
+          description: 'Compare portfolio average vs single unit contribution margin. Find hidden costs and build cost transparency.',
+          ogTitle: 'Contribution Margin Analyser — Operator Series',
+          ogDescription: 'Compare portfolio average vs single unit contribution margin. Find hidden costs.'
+        },
+        it: {
+          description: 'Confronta il margine di contribuzione medio del portafoglio con quello della singola unità. Trova i costi nascosti.',
+          ogTitle: 'Contribution Margin Analyser — Operator Series',
+          ogDescription: 'Confronta portafoglio e singola unità. Trova i costi nascosti nel margine di contribuzione.'
+        },
+        de: {
+          description: 'Vergleichen Sie den durchschnittlichen Deckungsbeitrag des Portfolios mit der einzelnen Unit. Finden Sie versteckte Kosten.',
+          ogTitle: 'Contribution Margin Analyser — Operator Series',
+          ogDescription: 'Vergleichen Sie Portfolio und einzelne Unit. Finden Sie versteckte Kosten im Deckungsbeitrag.'
+        }
+      };
+      window.updateOisMetadata = function (activeLang) {
+        const pack = metadata[activeLang] || metadata.en;
+        document.querySelectorAll('[data-i18n-meta]').forEach(function (el) {
+          const value = pack[el.getAttribute('data-i18n-meta')];
+          if (value) el.setAttribute('content', value);
+        });
+      };
+      window.updateOisMetadata(lang);
+    })();
+  </script>
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPJ7VKS451"></script>
   <script>
@@ -2507,6 +2556,7 @@
     function applyLang(lang) {
       currentLang = I18N[lang] ? lang : 'en';
       document.documentElement.lang = currentLang;
+      if (window.updateOisMetadata) window.updateOisMetadata(currentLang);
       const pack = I18N[currentLang];
 
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -3082,12 +3132,7 @@
         btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
       });
 
-      let startLang = 'en';
-      try {
-        const saved = localStorage.getItem('ois-lang');
-        if (saved && I18N[saved]) startLang = saved;
-      } catch (e) {}
-      applyLang(startLang);
+      applyLang(window.__oisInitialLang || 'en');
     });
   </script>
 
