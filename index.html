@@ -269,27 +269,39 @@
       padding: 40px 24px 56px;
     }
 
-    .intro {
-      margin-bottom: var(--section-gap);
+    .hero {
+      background: linear-gradient(170deg, #0F1B2E 0%, #14243D 55%, #0F1B2E 100%);
+      padding: 40px 24px 36px;
       text-align: center;
-      padding: 0 8px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .intro h1 {
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 122, 255, 0.22) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      position: relative;
       font-size: clamp(24px, 4vw, 32px);
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: 16px;
-      color: var(--ink);
+      color: #fff;
       line-height: 1.2;
     }
 
-    .intro p {
-      font-size: 16px;
-      color: var(--muted);
+    .hero p {
+      position: relative;
+      font-size: 14px;
+      color: rgba(180,200,225,0.85);
       max-width: 720px;
       margin: 0 auto;
-      line-height: 1.7;
+      line-height: 1.65;
     }
 
     /* ============================================================
@@ -1480,12 +1492,12 @@
         max-width: 100%;
       }
 
-      .intro {
+      .hero {
         margin-bottom: 16px;
         break-after: avoid;
       }
 
-      .intro h1 {
+      .hero h1 {
         font-size: 18pt;
       }
 
@@ -1643,15 +1655,15 @@
     </div>
   </header>
 
+  <div class="hero">
+    <h1 data-i18n="heroTitle">Portfolio averages hide what unit-level analysis reveals.</h1>
+    <p data-i18n="heroSubtitle">Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.</p>
+  </div>
+
   <!-- ============================================================
        MAIN
        ============================================================ -->
   <main>
-
-    <div class="intro">
-      <h1 data-i18n="heroTitle">Portfolio averages hide what unit-level analysis reveals.</h1>
-      <p data-i18n="heroSubtitle">Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.</p>
-    </div>
 
     <!-- ============================================================
          COMPARISON GRID
