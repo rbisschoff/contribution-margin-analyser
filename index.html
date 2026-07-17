@@ -2816,9 +2816,9 @@
 
       if (resultMode[prefix] === 'currency') {
         animateCount(valueEl, r.margin, v => formatEuro(v), prefix);
-        detailEl.textContent = t('pctOfRevenue', { pct: r.marginPercent.toFixed(1) });
+        detailEl.textContent = t('pctOfRevenue', { pct: r.marginPercent.toFixed(0) });
       } else {
-        animateCount(valueEl, r.marginPercent, v => `${v.toFixed(1)}%`, prefix);
+        animateCount(valueEl, r.marginPercent, v => `${v.toFixed(0)}%`, prefix);
         detailEl.textContent = t('perUnitMonth', { value: formatEuro(r.margin) });
       }
     }
@@ -2919,7 +2919,7 @@
             tooltip: {
               callbacks: {
                 label: ctx => {
-                  const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                  const pct = ((ctx.parsed / total) * 100).toFixed(0);
                   return ` ${ctx.label}: ${formatEuro(ctx.parsed)} (${pct}%)`;
                 }
               }
@@ -2987,7 +2987,7 @@
         insights.push({
           type: 'info',
           icon: 'i',
-          text: t('insightOwnerCost', { uPct: uOwnerPct.toFixed(1), pPct: pOwnerPct.toFixed(1) })
+          text: t('insightOwnerCost', { uPct: uOwnerPct.toFixed(0), pPct: pOwnerPct.toFixed(0) })
         });
       }
 
@@ -3102,11 +3102,11 @@
         pRevenue: formatEuro(pResult.revenue),
         pTotalCosts: formatEuro(pResult.totalCosts),
         pMargin: formatEuro(pResult.margin),
-        pMarginPct: pResult.marginPercent.toFixed(1),
+        pMarginPct: pResult.marginPercent.toFixed(0),
         uRevenue: formatEuro(uResult.revenue),
         uTotalCosts: formatEuro(uResult.totalCosts),
         uMargin: formatEuro(uResult.margin),
-        uMarginPct: uResult.marginPercent.toFixed(1),
+        uMarginPct: uResult.marginPercent.toFixed(0),
         gap: formatEuro(gap),
         gapAnnual: formatEuro(gap * 12)
       });
