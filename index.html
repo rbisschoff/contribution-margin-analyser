@@ -976,6 +976,51 @@
       margin-bottom: var(--section-gap);
     }
 
+    .portfolio-type-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .portfolio-type-btn {
+      text-align: left;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--ink);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s var(--ease-out);
+    }
+
+    .portfolio-type-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+
+    .portfolio-type-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .mixed-portfolio-panel {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: var(--section-gap);
+    }
+
+    .mixed-portfolio-note-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 8px 0 4px;
+    }
+
     .composition-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1683,6 +1728,18 @@
           <span class="card-badge portfolio" data-i18n="badgeAverage">Average</span>
         </div>
 
+        <!-- Portfolio type -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent" style="background: var(--portfolio);"></span>
+            <span data-i18n="secPortfolioType">Portfolio type</span>
+          </div>
+          <div class="portfolio-type-toggle" role="radiogroup" aria-label="Portfolio type">
+            <button type="button" class="portfolio-type-btn active" data-type="similar" onclick="setPortfolioType('similar')" data-i18n="portfolioTypeSimilar">Similar units (studios, 1-bedroom, 2-bedroom variations)</button>
+            <button type="button" class="portfolio-type-btn" data-type="mixed" onclick="setPortfolioType('mixed')" data-i18n="portfolioTypeMixed">Mixed or unique properties (villas, different sizes)</button>
+          </div>
+        </div>
+
         <!-- Revenue -->
         <div class="section">
           <div class="section-label">
@@ -2087,6 +2144,32 @@
     </div>
 
     <!-- ============================================================
+         MIXED PORTFOLIO NOTE + DIAGRAM
+         ============================================================ -->
+    <div class="mixed-portfolio-panel" id="mixedPortfolioPanel" style="display:none;">
+      <div class="insight-title">
+        <span style="color: var(--warning);">⚠</span>
+        <span data-i18n="mixedPortfolioNoteTitle">A note on mixed portfolios</span>
+      </div>
+      <p class="mixed-portfolio-note-text" data-i18n="mixedPortfolioNoteText">With villas or very different property types, one blended average can hide more than it shows, because a property carrying a loss and a property carrying a strong margin blend into a single number that resembles neither. This is an illustrative example rather than a precise model of your whole portfolio. It is meant to make the idea clear: some properties earn well on their own, others quietly cost you money, and a blended average will not tell you which is which. For an accurate read, it is worth running this once per property type.</p>
+      <svg width="100%" viewBox="0 0 680 380" role="img" aria-label="Diagram showing how a blended average hides individual property performance" style="margin-top:16px;">
+        <line x1="70" y1="280" x2="610" y2="280" stroke="var(--border)" stroke-width="1"/>
+        <line x1="70" y1="170" x2="555" y2="170" stroke="var(--muted)" stroke-width="1" stroke-dasharray="5 4"/>
+        <text x="565" y="174" font-size="12" fill="var(--muted)" data-i18n="diagramAverage">Average</text>
+        <rect x="100" y="70" width="50" height="210" rx="4" fill="var(--positive)" opacity="0.85"/>
+        <rect x="180" y="210" width="50" height="70" rx="4" fill="var(--warning)" opacity="0.85"/>
+        <rect x="260" y="95" width="50" height="185" rx="4" fill="var(--positive)" opacity="0.85"/>
+        <rect x="340" y="280" width="50" height="45" rx="4" fill="var(--alert)" opacity="0.85"/>
+        <rect x="420" y="170" width="50" height="110" rx="4" fill="var(--muted)" opacity="0.6"/>
+        <rect x="500" y="225" width="50" height="55" rx="4" fill="var(--warning)" opacity="0.85"/>
+        <line x1="125" y1="70" x2="90" y2="48" stroke="var(--muted)" stroke-width="0.5" stroke-dasharray="2 2"/>
+        <text x="70" y="43" font-size="12" fill="var(--ink)" data-i18n="diagramCashCow">Cash cow</text>
+        <line x1="365" y1="325" x2="365" y2="342" stroke="var(--muted)" stroke-width="0.5" stroke-dasharray="2 2"/>
+        <text x="365" y="357" font-size="12" text-anchor="middle" fill="var(--ink)" data-i18n="diagramCostCenter">Cost center</text>
+      </svg>
+    </div>
+
+    <!-- ============================================================
          COST COMPOSITION — side by side
          ============================================================ -->
     <div class="composition-section">
@@ -2278,6 +2361,15 @@
     let animFrames = {};
     let lastNumeric = {};
     let currentLang = 'en';
+    let portfolioType = 'similar';
+
+    function setPortfolioType(type) {
+      portfolioType = type;
+      document.querySelectorAll('.portfolio-type-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.type === type);
+      });
+      document.getElementById('mixedPortfolioPanel').style.display = (type === 'mixed') ? 'block' : 'none';
+    }
 
     const COST_COLORS = {
       ota: '#FF3B30',
@@ -2310,6 +2402,14 @@
         heroSubtitle: 'Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.',
         cardPortfolioTitle: 'Portfolio Birdview',
         badgeAverage: 'Average',
+        secPortfolioType: 'Portfolio type',
+        portfolioTypeSimilar: 'Similar units (studios, 1-bedroom, 2-bedroom variations)',
+        portfolioTypeMixed: 'Mixed or unique properties (villas, different sizes)',
+        mixedPortfolioNoteTitle: 'A note on mixed portfolios',
+        mixedPortfolioNoteText: 'With villas or very different property types, one blended average can hide more than it shows, because a property carrying a loss and a property carrying a strong margin blend into a single number that resembles neither. This is an illustrative example rather than a precise model of your whole portfolio. It is meant to make the idea clear: some properties earn well on their own, others quietly cost you money, and a blended average will not tell you which is which. For an accurate read, it is worth running this once per property type.',
+        diagramAverage: 'Average',
+        diagramCashCow: 'Cash cow',
+        diagramCostCenter: 'Cost center',
         secRevenue: 'Revenue',
         lblUnitsInPortfolio: 'Units in portfolio',
         lblAvgRevenuePerUnit: 'Avg monthly revenue / unit',
@@ -2429,6 +2529,14 @@
         heroSubtitle: 'La maggior parte degli operatori guarda le medie di portafoglio e presume che ogni unità contribuisca allo stesso modo. Non è mai così. Questo strumento mostra cosa diventa visibile quando analizzi una singola unità nel dettaglio e la confronti con la tua vista d\'insieme del portafoglio. Il punto non è giudicare l\'unità, ma capire cosa il tuo tech stack dovrebbe rivelare automaticamente, ogni mese, per ogni unità che gestisci.',
         cardPortfolioTitle: 'Vista d\'insieme del portafoglio',
         badgeAverage: 'Media',
+        secPortfolioType: 'Tipo di portafoglio',
+        portfolioTypeSimilar: 'Unità simili (variazioni di monolocali, bilocali, trilocali)',
+        portfolioTypeMixed: 'Proprietà miste o uniche (ville, dimensioni diverse)',
+        mixedPortfolioNoteTitle: 'Una nota sui portafogli misti',
+        mixedPortfolioNoteText: 'Con ville o proprietà molto diverse tra loro, una singola media può nascondere più di quanto mostri, perché una proprietà in perdita e una con un margine forte si fondono in un unico numero che non assomiglia a nessuna delle due. Questo è un esempio illustrativo, non un modello preciso dell\'intero portafoglio. Serve a rendere chiara l\'idea: alcune proprietà rendono bene da sole, altre ti costano silenziosamente, e una media aggregata non ti dice quale sia quale. Per una lettura accurata, conviene eseguire l\'analisi una volta per ogni tipo di proprietà.',
+        diagramAverage: 'Media',
+        diagramCashCow: 'Mucca da mungere',
+        diagramCostCenter: 'Centro di costo',
         secRevenue: 'Ricavi',
         lblUnitsInPortfolio: 'Unità nel portafoglio',
         lblAvgRevenuePerUnit: 'Ricavo medio mensile / unità',
@@ -2548,6 +2656,14 @@
         heroSubtitle: 'Die meisten Betreiber schauen auf Portfolio-Durchschnitte und nehmen an, dass jede Unit gleich viel beiträgt. Das stimmt nie. Dieses Tool zeigt, was sichtbar wird, wenn Sie eine einzelne Unit im Detail analysieren und mit Ihrer Portfolio-Übersicht vergleichen. Es geht nicht darum, die Unit zu bewerten. Es geht darum zu verstehen, was Ihr Tech-Stack automatisch aufzeigen sollte, jeden Monat, für jede Unit, die Sie betreiben.',
         cardPortfolioTitle: 'Portfolio-Übersicht',
         badgeAverage: 'Durchschnitt',
+        secPortfolioType: 'Portfolio-Typ',
+        portfolioTypeSimilar: 'Ähnliche Units (Varianten von Studios, 1-Zimmer-, 2-Zimmer-Wohnungen)',
+        portfolioTypeMixed: 'Gemischte oder einzigartige Objekte (Villen, unterschiedliche Größen)',
+        mixedPortfolioNoteTitle: 'Ein Hinweis zu gemischten Portfolios',
+        mixedPortfolioNoteText: 'Bei Villen oder sehr unterschiedlichen Objekttypen kann ein einziger Durchschnitt mehr verbergen, als er zeigt, weil ein Objekt mit Verlust und ein Objekt mit starker Marge sich zu einer Zahl vermischen, die keinem von beiden ähnelt. Dies ist ein anschauliches Beispiel und kein präzises Modell Ihres gesamten Portfolios. Es soll die Idee verdeutlichen: manche Objekte tragen sich gut von allein, andere kosten Sie still und leise Geld, und ein Durchschnitt sagt Ihnen nicht, welches welches ist. Für eine genaue Einschätzung lohnt es sich, die Analyse einmal je Objekttyp durchzuführen.',
+        diagramAverage: 'Durchschnitt',
+        diagramCashCow: 'Ertragsbringer',
+        diagramCostCenter: 'Kostenstelle',
         secRevenue: 'Umsatz',
         lblUnitsInPortfolio: 'Units im Portfolio',
         lblAvgRevenuePerUnit: 'Durchschn. Monatsumsatz / Unit',
