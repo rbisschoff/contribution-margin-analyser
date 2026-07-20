@@ -1738,11 +1738,11 @@
           </div>
         </div>
 
-        <!-- Mandatory Costs -->
+        <!-- Channel Costs -->
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent" style="background: var(--portfolio);"></span>
-            <span data-i18n="secDirectCostsP">Direct Costs (monthly avg)</span>
+            <span data-i18n="secDirectCostsP">Channel Costs (monthly avg)</span>
           </div>
 
           <div class="input-group-row">
@@ -1763,6 +1763,27 @@
                 <span class="input-suffix">%</span>
               </div>
             </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="p_directCost">
+                <span data-i18n="lblDirectCostMonth">Direct channel cost / month</span>
+                <span class="info-tip" data-i18n-tip="tipDirectCostMonth" data-tip="Combined cost of winning direct bookings: booking engine/website fee, marketing spend, and payment processing.">i</span>
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">€</span>
+                <input type="number" id="p_directCost" value="250" min="0" step="10">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operating Costs -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent" style="background: var(--portfolio);"></span>
+            <span data-i18n="secOperatingCostsP">Operating Costs (monthly avg)</span>
           </div>
 
           <div class="input-group-row">
@@ -1927,11 +1948,11 @@
           </div>
         </div>
 
-        <!-- Mandatory Costs -->
+        <!-- Channel Costs -->
         <div class="section">
           <div class="section-label">
             <span class="section-label-accent"></span>
-            <span data-i18n="secDirectCostsU">Direct Costs (this unit, monthly)</span>
+            <span data-i18n="secDirectCostsU">Channel Costs (this unit, monthly)</span>
           </div>
 
           <div class="input-group-row">
@@ -1949,6 +1970,27 @@
                 <span class="input-suffix">%</span>
               </div>
             </div>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group">
+              <label for="u_directCostPct">
+                <span data-i18n="lblDirectCostPct">Direct channel cost</span>
+                <span class="info-tip" data-i18n-tip="tipDirectCostPct" data-tip="Auto-filled from your portfolio's direct channel cost rate. Adjust if this unit gets more or less marketing attention than average.">i</span>
+              </label>
+              <div class="input-wrapper">
+                <input type="number" id="u_directCostPct" value="0" min="0" max="100" step="0.5" class="no-prefix with-suffix">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operating Costs -->
+        <div class="section">
+          <div class="section-label">
+            <span class="section-label-accent"></span>
+            <span data-i18n="secOperatingCostsU">Operating Costs (this unit, monthly)</span>
           </div>
 
           <div class="input-group-row">
@@ -2130,6 +2172,12 @@
             <td class="numeric" id="bd_d_ota">—</td>
           </tr>
           <tr class="cost-row">
+            <td data-i18n="rowDirectCost">Direct channel cost</td>
+            <td class="numeric" id="bd_p_directCost">€ —</td>
+            <td class="numeric" id="bd_u_directCost">€ —</td>
+            <td class="numeric" id="bd_d_directCost">—</td>
+          </tr>
+          <tr class="cost-row">
             <td data-i18n="rowOwner">Owner payout / rent</td>
             <td class="numeric" id="bd_p_owner">€ —</td>
             <td class="numeric" id="bd_u_owner">€ —</td>
@@ -2224,6 +2272,7 @@
        ============================================================ -->
   <script>
     let resultMode = { p: 'currency', u: 'currency' };
+    let directCostPctUserSet = false;
     let chartPortfolio = null;
     let chartUnit = null;
     let animFrames = {};
@@ -2274,10 +2323,13 @@
         ownerValueLabelRevShare: 'Owner share (% of net revenue)',
         ownerValueLabelFixedRent: 'Fixed monthly rent',
         ownerValueLabelMgmtFee: 'Management fee to operator (%)',
-        secDirectCostsP: 'Direct Costs (monthly avg)',
+        secDirectCostsP: 'Channel Costs (monthly avg)',
         lblOtaShare: 'OTA share',
         tipOtaShare: '% of bookings coming through OTAs (Booking.com, Airbnb, etc.)',
         lblOtaCommission: 'Avg OTA commission',
+        secOperatingCostsP: 'Operating Costs (monthly avg)',
+        lblDirectCostMonth: 'Direct channel cost / month',
+        tipDirectCostMonth: 'Combined cost of winning direct bookings: booking engine/website fee, marketing spend, and payment processing.',
         lblCleaningMonth: 'Cleaning / month',
         lblTaxesMonth: 'Local taxes / month',
         hiddenCostsToggleLabel: '⊕ Hidden costs (optional)',
@@ -2298,7 +2350,10 @@
         badgeThisUnit: 'This unit',
         lblUnitRevenue: 'This unit\'s monthly revenue',
         lblAgreementTypeU: 'This unit\'s agreement type',
-        secDirectCostsU: 'Direct Costs (this unit, monthly)',
+        secDirectCostsU: 'Channel Costs (this unit, monthly)',
+        secOperatingCostsU: 'Operating Costs (this unit, monthly)',
+        lblDirectCostPct: 'Direct channel cost',
+        tipDirectCostPct: 'Auto-filled from your portfolio\'s direct channel cost rate. Adjust if this unit gets more or less marketing attention than average.',
         resultLabelUnit: 'This unit\'s monthly margin',
         compTitle: 'Cost Composition',
         compDesc: 'Same revenue, different cost layers: this is what portfolio averages flatten out.',
@@ -2317,6 +2372,7 @@
         thDifference: 'Difference',
         rowRevenue: 'Monthly revenue',
         rowOta: 'OTA commission',
+        rowDirectCost: 'Direct channel cost',
         rowOwner: 'Owner payout / rent',
         rowCleaning: 'Cleaning',
         rowTaxes: 'Local taxes',
@@ -2362,7 +2418,7 @@
         insightHiddenZero: '<strong>Hidden costs are currently set to zero.</strong> Most operators have utilities, internet, linen, maintenance reserves, and local team costs that quietly eat margin every month. These rarely appear in reporting because they are not tracked per unit. Add them above to see how the picture changes.',
         insightMarginDiff: '<strong>This unit\'s margin is {direction} than the portfolio average.</strong> The reason matters more than the number. Look at the breakdown below: which cost layers drive the difference? That is where commercial decisions can be made: pricing, channel mix, owner conversations, operational changes.',
         insightMethodology: '<strong>Now imagine doing this for every unit in your portfolio.</strong> The patterns become visible. Which units are quietly carrying the business, which ones are quietly losing money, which agreements need renegotiation, which channels need rebalancing. This is what cost transparency at scale looks like.',
-        exportSummaryTemplate: 'CONTRIBUTION MARGIN ANALYSIS\nOperator Series · by Roger Bisschoff\n\nPORTFOLIO BIRDVIEW (Avg per unit / month):\n- Revenue: {pRevenue}\n- Total costs: {pTotalCosts}\n- Contribution margin: {pMargin} ({pMarginPct}%)\n\nTHIS UNIT (Monthly):\n- Revenue: {uRevenue}\n- Total costs: {uTotalCosts}\n- Contribution margin: {uMargin} ({uMarginPct}%)\n\nTHE GAP:\n- Difference per unit / month: {gap}\n- Annualised: {gapAnnual}\n\nGenerated by Operator Series Contribution Margin Analyser'
+        exportSummaryTemplate: 'CONTRIBUTION MARGIN ANALYSIS\nOperator Series · by Roger Bisschoff\n\nPORTFOLIO BIRDVIEW (Avg per unit / month):\n- Revenue: {pRevenue}\n- Total costs: {pTotalCosts}\n- Contribution margin: {pMargin} ({pMarginPct}%)\n\nTHIS UNIT (Monthly):\n- Revenue: {uRevenue}\n- Total costs: {uTotalCosts}\n- Contribution margin: {uMargin} ({uMarginPct}%)\n\nTHE GAP:\n- Difference per unit / month: {gap}\n- Annualised: {gapAnnual}\n\nGenerated by Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nBuilding that cost transparency into how you decide is the work I do with operators. If you want to talk it through: rbisschoff@gmail.com'
       },
       it: {
         brandTitle: 'Contribution Margin Analyser',
@@ -2386,10 +2442,13 @@
         ownerValueLabelRevShare: 'Quota proprietario (% del ricavo netto)',
         ownerValueLabelFixedRent: 'Affitto mensile fisso',
         ownerValueLabelMgmtFee: 'Management fee all\'operatore (%)',
-        secDirectCostsP: 'Costi diretti (media mensile)',
+        secDirectCostsP: 'Costi di canale (media mensile)',
         lblOtaShare: 'Quota OTA',
         tipOtaShare: '% delle prenotazioni che arrivano tramite OTA (Booking.com, Airbnb, ecc.)',
         lblOtaCommission: 'Commissione OTA media',
+        secOperatingCostsP: 'Costi operativi (media mensile)',
+        lblDirectCostMonth: 'Costo canale diretto / mese',
+        tipDirectCostMonth: 'Costo combinato per generare prenotazioni dirette: booking engine/sito web, spesa marketing e processamento pagamenti.',
         lblCleaningMonth: 'Pulizie / mese',
         lblTaxesMonth: 'Tasse locali / mese',
         hiddenCostsToggleLabel: '⊕ Costi nascosti (opzionale)',
@@ -2410,7 +2469,10 @@
         badgeThisUnit: 'Questa unità',
         lblUnitRevenue: 'Ricavo mensile di questa unità',
         lblAgreementTypeU: 'Tipo di accordo di questa unità',
-        secDirectCostsU: 'Costi diretti (questa unità, mensile)',
+        secDirectCostsU: 'Costi di canale (questa unità, mensile)',
+        secOperatingCostsU: 'Costi operativi (questa unità, mensile)',
+        lblDirectCostPct: 'Costo canale diretto',
+        tipDirectCostPct: 'Precompilato dal tasso di costo del canale diretto del tuo portafoglio. Modifica se questa unità riceve più o meno attenzione di marketing rispetto alla media.',
         resultLabelUnit: 'Margine mensile di questa unità',
         compTitle: 'Composizione dei costi',
         compDesc: 'Stesso ricavo, livelli di costo diversi: questo è ciò che le medie di portafoglio appiattiscono.',
@@ -2429,6 +2491,7 @@
         thDifference: 'Differenza',
         rowRevenue: 'Ricavo mensile',
         rowOta: 'Commissione OTA',
+        rowDirectCost: 'Costo canale diretto',
         rowOwner: 'Payout proprietario / affitto',
         rowCleaning: 'Pulizie',
         rowTaxes: 'Tasse locali',
@@ -2474,7 +2537,7 @@
         insightHiddenZero: '<strong>I costi nascosti sono attualmente impostati a zero.</strong> La maggior parte degli operatori ha costi di utenze, internet, biancheria, riserve di manutenzione e team locale che erodono silenziosamente il margine ogni mese. Raramente compaiono nel reporting perché non sono tracciati per unità. Aggiungili sopra per vedere come cambia il quadro.',
         insightMarginDiff: '<strong>Il margine di questa unità è {direction} della media di portafoglio.</strong> Il motivo conta più del numero. Guarda la ripartizione sotto: quali livelli di costo determinano la differenza? È lì che si possono prendere decisioni commerciali: prezzi, mix di canali, conversazioni con il proprietario, cambiamenti operativi.',
         insightMethodology: '<strong>Ora immagina di fare questo per ogni unità del tuo portafoglio.</strong> I pattern diventano visibili. Quali unità sostengono silenziosamente il business, quali perdono silenziosamente denaro, quali accordi vanno rinegoziati, quali canali vanno riequilibrati. Questo è cosa significa trasparenza sui costi su scala.',
-        exportSummaryTemplate: 'ANALISI DEL MARGINE DI CONTRIBUZIONE\nOperator Series · di Roger Bisschoff\n\nVISTA D\'INSIEME DEL PORTAFOGLIO (Media per unità / mese):\n- Ricavo: {pRevenue}\n- Costi totali: {pTotalCosts}\n- Margine di contribuzione: {pMargin} ({pMarginPct}%)\n\nQUESTA UNITÀ (Mensile):\n- Ricavo: {uRevenue}\n- Costi totali: {uTotalCosts}\n- Margine di contribuzione: {uMargin} ({uMarginPct}%)\n\nIL DIVARIO:\n- Differenza per unità / mese: {gap}\n- Annualizzata: {gapAnnual}\n\nGenerato da Operator Series Contribution Margin Analyser'
+        exportSummaryTemplate: 'ANALISI DEL MARGINE DI CONTRIBUZIONE\nOperator Series · di Roger Bisschoff\n\nVISTA D\'INSIEME DEL PORTAFOGLIO (Media per unità / mese):\n- Ricavo: {pRevenue}\n- Costi totali: {pTotalCosts}\n- Margine di contribuzione: {pMargin} ({pMarginPct}%)\n\nQUESTA UNITÀ (Mensile):\n- Ricavo: {uRevenue}\n- Costi totali: {uTotalCosts}\n- Margine di contribuzione: {uMargin} ({uMarginPct}%)\n\nIL DIVARIO:\n- Differenza per unità / mese: {gap}\n- Annualizzata: {gapAnnual}\n\nGenerato da Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nIntegrare quella trasparenza sui costi nel modo in cui decidi è il lavoro che faccio con gli operatori. Se vuoi parlarne: rbisschoff@gmail.com'
       },
       de: {
         brandTitle: 'Contribution Margin Analyser',
@@ -2498,10 +2561,13 @@
         ownerValueLabelRevShare: 'Eigentümeranteil (% vom Nettoumsatz)',
         ownerValueLabelFixedRent: 'Feste Monatsmiete',
         ownerValueLabelMgmtFee: 'Management Fee an den Betreiber (%)',
-        secDirectCostsP: 'Direkte Kosten (Monatsdurchschnitt)',
+        secDirectCostsP: 'Kanalkosten (Monatsdurchschnitt)',
         lblOtaShare: 'OTA-Anteil',
         tipOtaShare: '% der Buchungen über OTAs (Booking.com, Airbnb usw.)',
         lblOtaCommission: 'Durchschn. OTA-Provision',
+        secOperatingCostsP: 'Betriebskosten (Monatsdurchschnitt)',
+        lblDirectCostMonth: 'Direktkanal-Kosten / Monat',
+        tipDirectCostMonth: 'Kombinierte Kosten für Direktbuchungen: Booking-Engine/Website-Gebühr, Marketingausgaben und Zahlungsabwicklung.',
         lblCleaningMonth: 'Reinigung / Monat',
         lblTaxesMonth: 'Lokale Steuern / Monat',
         hiddenCostsToggleLabel: '⊕ Versteckte Kosten (optional)',
@@ -2522,7 +2588,10 @@
         badgeThisUnit: 'Diese Unit',
         lblUnitRevenue: 'Monatsumsatz dieser Unit',
         lblAgreementTypeU: 'Vereinbarungstyp dieser Unit',
-        secDirectCostsU: 'Direkte Kosten (diese Unit, monatlich)',
+        secDirectCostsU: 'Kanalkosten (diese Unit, monatlich)',
+        secOperatingCostsU: 'Betriebskosten (diese Unit, monatlich)',
+        lblDirectCostPct: 'Direktkanal-Kosten',
+        tipDirectCostPct: 'Automatisch befüllt aus der Direktkanal-Kostenrate Ihres Portfolios. Passen Sie diesen Wert an, wenn diese Unit mehr oder weniger Marketing-Aufmerksamkeit erhält als der Durchschnitt.',
         resultLabelUnit: 'Monatliche Marge dieser Unit',
         compTitle: 'Kostenzusammensetzung',
         compDesc: 'Gleicher Umsatz, unterschiedliche Kostenebenen: Das ist es, was Portfolio-Durchschnitte einebnen.',
@@ -2541,6 +2610,7 @@
         thDifference: 'Differenz',
         rowRevenue: 'Monatsumsatz',
         rowOta: 'OTA-Provision',
+        rowDirectCost: 'Direktkanal-Kosten',
         rowOwner: 'Eigentümerauszahlung / Miete',
         rowCleaning: 'Reinigung',
         rowTaxes: 'Lokale Steuern',
@@ -2586,7 +2656,7 @@
         insightHiddenZero: '<strong>Versteckte Kosten sind derzeit auf null gesetzt.</strong> Die meisten Betreiber haben Nebenkosten, Internet, Wäsche, Wartungsrücklagen und lokale Teamkosten, die jeden Monat still die Marge auffressen. Sie erscheinen selten im Reporting, weil sie nicht pro Unit erfasst werden. Fügen Sie sie oben hinzu, um zu sehen, wie sich das Bild ändert.',
         insightMarginDiff: '<strong>Die Marge dieser Unit ist {direction} als der Portfolio-Durchschnitt.</strong> Der Grund zählt mehr als die Zahl. Schauen Sie sich die Aufschlüsselung unten an: welche Kostenebenen treiben den Unterschied? Dort lassen sich kommerzielle Entscheidungen treffen: Preisgestaltung, Kanalmix, Eigentümergespräche, betriebliche Änderungen.',
         insightMethodology: '<strong>Stellen Sie sich vor, Sie tun das für jede Unit in Ihrem Portfolio.</strong> Die Muster werden sichtbar. Welche Units tragen still das Geschäft, welche verlieren still Geld, welche Vereinbarungen müssen neu verhandelt werden, welche Kanäle müssen neu ausgerichtet werden. Das ist, wie Kostentransparenz im großen Maßstab aussieht.',
-        exportSummaryTemplate: 'ANALYSE DES DECKUNGSBEITRAGS\nOperator Series · von Roger Bisschoff\n\nPORTFOLIO-ÜBERSICHT (Durchschn. pro Unit / Monat):\n- Umsatz: {pRevenue}\n- Gesamtkosten: {pTotalCosts}\n- Deckungsbeitrag: {pMargin} ({pMarginPct}%)\n\nDIESE UNIT (Monatlich):\n- Umsatz: {uRevenue}\n- Gesamtkosten: {uTotalCosts}\n- Deckungsbeitrag: {uMargin} ({uMarginPct}%)\n\nDIE LÜCKE:\n- Differenz pro Unit / Monat: {gap}\n- Annualisiert: {gapAnnual}\n\nErstellt von Operator Series Contribution Margin Analyser'
+        exportSummaryTemplate: 'ANALYSE DES DECKUNGSBEITRAGS\nOperator Series · von Roger Bisschoff\n\nPORTFOLIO-ÜBERSICHT (Durchschn. pro Unit / Monat):\n- Umsatz: {pRevenue}\n- Gesamtkosten: {pTotalCosts}\n- Deckungsbeitrag: {pMargin} ({pMarginPct}%)\n\nDIESE UNIT (Monatlich):\n- Umsatz: {uRevenue}\n- Gesamtkosten: {uTotalCosts}\n- Deckungsbeitrag: {uMargin} ({uMarginPct}%)\n\nDIE LÜCKE:\n- Differenz pro Unit / Monat: {gap}\n- Annualisiert: {gapAnnual}\n\nErstellt von Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nGenau diese Kostentransparenz in Ihre Entscheidungen einzubauen ist meine Arbeit mit Betreibern. Wenn Sie darüber sprechen möchten: rbisschoff@gmail.com'
       }
     };
 
@@ -2712,7 +2782,7 @@
     // CALCULATIONS
     // ============================================================
     function getInputs(prefix) {
-      return {
+      const base = {
         units: prefix === 'p' ? (parseFloat(document.getElementById('p_units').value) || 1) : 1,
         revenue: parseFloat(document.getElementById(`${prefix}_revenue`).value) || 0,
         ownerType: document.getElementById(`${prefix}_ownerType`).value,
@@ -2728,35 +2798,40 @@
         insurance: parseFloat(document.getElementById(`${prefix}_insurance`).value) || 0,
         localTeam: parseFloat(document.getElementById(`${prefix}_localTeam`).value) || 0
       };
+      if (prefix === 'p') {
+        base.directCostAmount = parseFloat(document.getElementById('p_directCost').value) || 0;
+      } else {
+        base.directCostPct = parseFloat(document.getElementById('u_directCostPct').value) || 0;
+      }
+      return base;
     }
 
     function calculateMargin(i) {
       const otaRevenue = i.revenue * (i.otaShare / 100);
       const otaCommissionAmount = otaRevenue * (i.otaCommission / 100);
+      const directRevenue = i.revenue - otaRevenue;
+      const directCostAmount = (i.directCostAmount !== undefined) ? i.directCostAmount : directRevenue * (i.directCostPct / 100);
       
-      // Net revenue after channel costs (for owner share calculation)
-      const netRevenue = i.revenue - otaCommissionAmount;
+      const netRevenue = i.revenue - otaCommissionAmount - directCostAmount;
       
-      // Owner cost depends on agreement type
       let ownerCost = 0;
       if (i.ownerType === 'revShare') {
         ownerCost = netRevenue * (i.ownerValue / 100);
       } else if (i.ownerType === 'fixedRent') {
         ownerCost = i.ownerValue;
       } else if (i.ownerType === 'mgmtFee') {
-        // In mgmt fee model, operator takes a fee and the rest goes to owner
-        // We treat owner cost as: revenue minus operator's fee
         ownerCost = i.revenue - (i.revenue * (i.ownerValue / 100));
       }
       
       const hiddenCosts = i.utilities + i.internet + i.linen + i.maintenance + i.insurance + i.localTeam;
-      const totalCosts = otaCommissionAmount + ownerCost + i.cleaning + i.taxes + hiddenCosts;
+      const totalCosts = otaCommissionAmount + directCostAmount + ownerCost + i.cleaning + i.taxes + hiddenCosts;
       const margin = i.revenue - totalCosts;
       const marginPercent = i.revenue > 0 ? (margin / i.revenue) * 100 : 0;
       
       return {
         revenue: i.revenue,
         ota: otaCommissionAmount,
+        directCost: directCostAmount,
         owner: ownerCost,
         cleaning: i.cleaning,
         taxes: i.taxes,
@@ -2768,6 +2843,14 @@
     }
 
     function calculate() {
+      if (!directCostPctUserSet) {
+        const pDirectCost = parseFloat(document.getElementById('p_directCost').value) || 0;
+        const pRevenueVal = parseFloat(document.getElementById('p_revenue').value) || 0;
+        const pOtaShareVal = parseFloat(document.getElementById('p_otaShare').value) || 0;
+        const pDirectRevenue = pRevenueVal * (1 - pOtaShareVal / 100);
+        const defaultPct = pDirectRevenue > 0 ? (pDirectCost / pDirectRevenue) * 100 : 0;
+        document.getElementById('u_directCostPct').value = defaultPct.toFixed(1);
+      }
       const pInputs = getInputs('p');
       const uInputs = getInputs('u');
       
@@ -2843,6 +2926,10 @@
       document.getElementById('bd_p_ota').textContent = formatEuro(p.ota);
       document.getElementById('bd_u_ota').textContent = formatEuro(u.ota);
       document.getElementById('bd_d_ota').innerHTML = formatDelta(u.ota - p.ota, false);
+      
+      document.getElementById('bd_p_directCost').textContent = formatEuro(p.directCost);
+      document.getElementById('bd_u_directCost').textContent = formatEuro(u.directCost);
+      document.getElementById('bd_d_directCost').innerHTML = formatDelta(u.directCost - p.directCost, false);
       
       document.getElementById('bd_p_owner').textContent = formatEuro(p.owner);
       document.getElementById('bd_u_owner').textContent = formatEuro(u.owner);
@@ -3078,6 +3165,7 @@
             const el = document.getElementById(key);
             if (el) el.value = state[key];
           });
+          if ('u_directCostPct' in state) directCostPctUserSet = true;
         } catch (e) {
           console.error('Failed to load state', e);
         }
@@ -3135,6 +3223,7 @@
           const el = document.getElementById(key);
           if (el) el.value = value;
         });
+        if (params.has('u_directCostPct')) directCostPctUserSet = true;
       }
     }
 
@@ -3175,6 +3264,10 @@
       
       document.querySelectorAll('input, select').forEach(input => {
         input.addEventListener('input', calculate);
+      });
+
+      document.getElementById('u_directCostPct').addEventListener('input', () => {
+        directCostPctUserSet = true;
       });
 
       document.querySelectorAll('.lang-btn').forEach(btn => {
