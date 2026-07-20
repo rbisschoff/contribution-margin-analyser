@@ -2165,6 +2165,36 @@
     </div>
 
     <!-- ============================================================
+         WHY PER-UNIT VISIBILITY MATTERS
+         ============================================================ -->
+    <div class="insight-section">
+      <div class="insight-title">
+        <span style="color: var(--accent);">⚡</span>
+        <span data-i18n="insightTitle">Why Per-Unit Visibility Matters</span>
+      </div>
+
+      <div class="gap-indicator" id="gapIndicator">
+        <div class="gap-text">
+          <div class="gap-text-label" data-i18n="gapLabelDiff">Difference per unit / month</div>
+          <div class="gap-text-value" id="gapValue">€ —</div>
+          <div class="gap-text-detail" id="gapDetail" data-i18n="gapDetailDefault">What the average hides about this unit</div>
+        </div>
+        <div class="gap-text" style="text-align: right;">
+          <div class="gap-text-label" data-i18n="gapLabelAnnual">Annualised</div>
+          <div class="gap-text-value" id="gapAnnual">€ —</div>
+          <div class="gap-text-detail" data-i18n="gapDetailAnnual">12-month projection of this difference</div>
+        </div>
+      </div>
+
+      <ul class="insight-list" id="insightList">
+        <li>
+          <span class="insight-icon info">i</span>
+          <span data-i18n="insightPlaceholder">Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
          COST COMPOSITION — side by side
          ============================================================ -->
     <div class="composition-section">
@@ -2260,38 +2290,6 @@
       </div>
 
       <div class="breakdown-cards" id="breakdownCards" aria-label="Cost breakdown by line item" data-i18n-aria="breakdownCardsAriaLabel"></div>
-    </div>
-
-
-
-    <!-- ============================================================
-         WHY PER-UNIT VISIBILITY MATTERS
-         ============================================================ -->
-    <div class="insight-section">
-      <div class="insight-title">
-        <span style="color: var(--accent);">⚡</span>
-        <span data-i18n="insightTitle">Why Per-Unit Visibility Matters</span>
-      </div>
-
-      <div class="gap-indicator" id="gapIndicator">
-        <div class="gap-text">
-          <div class="gap-text-label" data-i18n="gapLabelDiff">Difference per unit / month</div>
-          <div class="gap-text-value" id="gapValue">€ —</div>
-          <div class="gap-text-detail" id="gapDetail" data-i18n="gapDetailDefault">What the average hides about this unit</div>
-        </div>
-        <div class="gap-text" style="text-align: right;">
-          <div class="gap-text-label" data-i18n="gapLabelAnnual">Annualised</div>
-          <div class="gap-text-value" id="gapAnnual">€ —</div>
-          <div class="gap-text-detail" data-i18n="gapDetailAnnual">12-month projection of this difference</div>
-        </div>
-      </div>
-
-      <ul class="insight-list" id="insightList">
-        <li>
-          <span class="insight-icon info">i</span>
-          <span data-i18n="insightPlaceholder">Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
-        </li>
-      </ul>
     </div>
 
     <!-- ============================================================
@@ -2538,7 +2536,7 @@
         insightCleaning: '<strong>Cleaning on Unit B is {diff}% {direction} than Unit A.</strong> This could be the unit size, the turnover frequency, or the cleaning arrangement itself. Across a portfolio of twenty or thirty units, these variations add up to a meaningful figure, but only if you can see them.',
         insightOta: '<strong>OTA dependency on Unit B ({uOta}%) is {direction} than Unit A ({pOta}%).</strong> Different unit types attract demand differently. That is where direct-channel investment decisions get interesting.',
         insightHiddenZero: '<strong>Hidden costs are currently set to zero.</strong> Most operators have utilities, internet, linen, maintenance reserves, and local team costs that quietly eat margin every month. These rarely appear in reporting because they are not tracked per unit. Add them above to see how the picture changes.',
-        insightMarginDiff: '<strong>Unit B\'s margin is {direction} than Unit A\'s.</strong> The reason matters more than the number. Look at the breakdown above: which cost layers drive the difference? That is where commercial decisions can be made: pricing, channel mix, owner conversations, operational changes.',
+        insightMarginDiff: '<strong>Unit B\'s margin is {direction} than Unit A\'s.</strong> The reason matters more than the number. Look at the cost-by-cost breakdown: which cost layers drive the difference? That is where commercial decisions can be made: pricing, channel mix, owner conversations, operational changes.',
         insightMethodology: '<strong>Now imagine doing this for every unit in your portfolio.</strong> The patterns become visible. Which units are quietly carrying the business, which ones are quietly losing money, which agreements need renegotiation, which channels need rebalancing. This is what cost transparency at scale looks like.',
         exportSummaryTemplate: 'CONTRIBUTION MARGIN ANALYSIS\nOperator Series · by Roger Bisschoff\n\nPORTFOLIO BIRDVIEW (Monthly totals):\n- Revenue: {pRevenue}\n- Total costs: {pTotalCosts}\n- Contribution margin: {pMargin} ({pMarginPct}%)\n\nUNIT A (Monthly):\n- Revenue: {aRevenue}\n- Total costs: {aTotalCosts}\n- Contribution margin: {aMargin} ({aMarginPct}%)\n\nUNIT B (Monthly):\n- Revenue: {bRevenue}\n- Total costs: {bTotalCosts}\n- Contribution margin: {bMargin} ({bMarginPct}%)\n\nUNIT A vs UNIT B:\n- Margin difference / month: {gap}\n- Annualised: {gapAnnual}\n\nGenerated by Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nBuilding that cost transparency into how you decide is the work I do with operators. If you want to talk it through: rbisschoff@gmail.com'
       },
@@ -2677,7 +2675,7 @@
         insightCleaning: '<strong>Le pulizie sull\'Unità B sono del {diff}% {direction} rispetto all\'Unità A.</strong> Potrebbe essere la dimensione dell\'unità, la frequenza di turnover, o l\'accordo di pulizia stesso. Su un portafoglio di venti o trenta unità, queste variazioni si accumulano in cifre significative, ma solo se riesci a vederle.',
         insightOta: '<strong>La dipendenza da OTA su questa unità ({uOta}%) è {direction} della tua media di portafoglio ({pOta}%).</strong> Ogni unità attrae la domanda in modo diverso. Capire questo per unità ti permette di decidere dove investire nella domanda diretta e dove accettare la dipendenza OTA come costo del fare impresa.',
         insightHiddenZero: '<strong>I costi nascosti sono attualmente impostati a zero.</strong> La maggior parte degli operatori ha costi di utenze, internet, biancheria, riserve di manutenzione e team locale che erodono silenziosamente il margine ogni mese. Raramente compaiono nel reporting perché non sono tracciati per unità. Aggiungili sopra per vedere come cambia il quadro.',
-        insightMarginDiff: '<strong>Il margine dell\'Unità B è {direction} di quello dell\'Unità A.</strong> Il motivo conta più del numero. Guarda la ripartizione sopra: quali livelli di costo determinano la differenza? È lì che si possono prendere decisioni commerciali: prezzi, mix di canali, conversazioni con il proprietario, cambiamenti operativi.',
+        insightMarginDiff: '<strong>Il margine dell\'Unità B è {direction} di quello dell\'Unità A.</strong> Il motivo conta più del numero. Guarda la ripartizione dei costi: quali livelli di costo determinano la differenza? È lì che si possono prendere decisioni commerciali: prezzi, mix di canali, conversazioni con il proprietario, cambiamenti operativi.',
         insightMethodology: '<strong>Ora immagina di fare questo per ogni unità del tuo portafoglio.</strong> I pattern diventano visibili. Quali unità sostengono silenziosamente il business, quali perdono silenziosamente denaro, quali accordi vanno rinegoziati, quali canali vanno riequilibrati. Questo è cosa significa trasparenza sui costi su scala.',
         exportSummaryTemplate: 'ANALISI DEL MARGINE DI CONTRIBUZIONE\nOperator Series · di Roger Bisschoff\n\nVISTA D\'INSIEME DEL PORTAFOGLIO (Totali mensili):\n- Ricavo: {pRevenue}\n- Costi totali: {pTotalCosts}\n- Margine di contribuzione: {pMargin} ({pMarginPct}%)\n\nUNITÀ A (Mensile):\n- Ricavo: {aRevenue}\n- Costi totali: {aTotalCosts}\n- Margine di contribuzione: {aMargin} ({aMarginPct}%)\n\nUNITÀ B (Mensile):\n- Ricavo: {bRevenue}\n- Costi totali: {bTotalCosts}\n- Margine di contribuzione: {bMargin} ({bMarginPct}%)\n\nUNITÀ A vs UNITÀ B:\n- Differenza di margine / mese: {gap}\n- Annualizzata: {gapAnnual}\n\nGenerato da Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nIntegrare quella trasparenza sui costi nel modo in cui decidi è il lavoro che faccio con gli operatori. Se vuoi parlarne: rbisschoff@gmail.com'
       },
@@ -2816,7 +2814,7 @@
         insightCleaning: '<strong>Die Reinigungskosten von Unit B sind {diff}% {direction} als bei Unit A.</strong> Das könnte an der Unit-Größe, der Wechselhäufigkeit oder der Reinigungsvereinbarung selbst liegen. Über ein Portfolio von zwanzig oder dreißig Units summieren sich diese Abweichungen zu relevantem Geld, aber nur, wenn Sie sie sehen können.',
         insightOta: '<strong>Die OTA-Abhängigkeit dieser Unit ({uOta}%) ist {direction} als Ihr Portfolio-Durchschnitt ({pOta}%).</strong> Jede Unit zieht Nachfrage unterschiedlich an. Das pro Unit zu verstehen, lässt Sie entscheiden, wo Sie in Direktnachfrage investieren und wo Sie OTA-Abhängigkeit als Preis des Geschäfts akzeptieren.',
         insightHiddenZero: '<strong>Versteckte Kosten sind derzeit auf null gesetzt.</strong> Die meisten Betreiber haben Nebenkosten, Internet, Wäsche, Wartungsrücklagen und lokale Teamkosten, die jeden Monat still die Marge auffressen. Sie erscheinen selten im Reporting, weil sie nicht pro Unit erfasst werden. Fügen Sie sie oben hinzu, um zu sehen, wie sich das Bild ändert.',
-        insightMarginDiff: '<strong>Die Marge von Unit B ist {direction} als die von Unit A.</strong> Der Grund zählt mehr als die Zahl. Schauen Sie sich die Aufschlüsselung oben an: welche Kostenebenen treiben den Unterschied? Dort lassen sich kommerzielle Entscheidungen treffen: Preisgestaltung, Kanalmix, Eigentümergespräche, betriebliche Änderungen.',
+        insightMarginDiff: '<strong>Die Marge von Unit B ist {direction} als die von Unit A.</strong> Der Grund zählt mehr als die Zahl. Schauen Sie sich die Kostenaufschlüsselung an: welche Kostenebenen treiben den Unterschied? Dort lassen sich kommerzielle Entscheidungen treffen: Preisgestaltung, Kanalmix, Eigentümergespräche, betriebliche Änderungen.',
         insightMethodology: '<strong>Stellen Sie sich vor, Sie tun das für jede Unit in Ihrem Portfolio.</strong> Die Muster werden sichtbar. Welche Units tragen still das Geschäft, welche verlieren still Geld, welche Vereinbarungen müssen neu verhandelt werden, welche Kanäle müssen neu ausgerichtet werden. Das ist, wie Kostentransparenz im großen Maßstab aussieht.',
         exportSummaryTemplate: 'ANALYSE DES DECKUNGSBEITRAGS\nOperator Series · von Roger Bisschoff\n\nPORTFOLIO-ÜBERSICHT (Monatliche Gesamtwerte):\n- Umsatz: {pRevenue}\n- Gesamtkosten: {pTotalCosts}\n- Deckungsbeitrag: {pMargin} ({pMarginPct}%)\n\nUNIT A (Monatlich):\n- Umsatz: {aRevenue}\n- Gesamtkosten: {aTotalCosts}\n- Deckungsbeitrag: {aMargin} ({aMarginPct}%)\n\nUNIT B (Monatlich):\n- Umsatz: {bRevenue}\n- Gesamtkosten: {bTotalCosts}\n- Deckungsbeitrag: {bMargin} ({bMarginPct}%)\n\nUNIT A vs UNIT B:\n- Margendifferenz / Monat: {gap}\n- Annualisiert: {gapAnnual}\n\nErstellt von Operator Series Contribution Margin Analyser\nrbisschoff.github.io/contribution-margin-analyser\n\nGenau diese Kostentransparenz in Ihre Entscheidungen einzubauen ist meine Arbeit mit Betreibern. Wenn Sie darüber sprechen möchten: rbisschoff@gmail.com'
       }
