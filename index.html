@@ -356,10 +356,6 @@
       flex: 1 1 320px;
     }
 
-    .comparison-grid .card-portfolio {
-      align-self: flex-start;
-    }
-
     .property-type-select {
       width: 100%;
       padding: 10px 14px;
@@ -375,40 +371,6 @@
       color: var(--muted);
       line-height: 1.5;
       margin: 4px 0 8px;
-    }
-
-    .comparison-bridge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 0;
-      position: relative;
-    }
-
-    .comparison-bridge::before {
-      content: '';
-      position: absolute;
-      top: 8%;
-      bottom: 8%;
-      left: 50%;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, var(--border) 12%, var(--border) 88%, transparent);
-      transform: translateX(-50%);
-    }
-
-    .comparison-bridge-label {
-      position: relative;
-      z-index: 1;
-      background: var(--bg);
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 8px 4px;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
     }
 
     @media (max-width: 900px) {
@@ -450,6 +412,9 @@
       position: relative;
       background: linear-gradient(180deg, #FAFAFC 0%, var(--card) 100%);
       opacity: 0.97;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
     }
 
     .card-portfolio::before {
@@ -804,6 +769,7 @@
 
     .result-highlight.portfolio {
       background: linear-gradient(135deg, #6B7B8C 0%, #4A5568 55%, #3D4A57 100%);
+      margin-top: auto;
     }
 
     .result-highlight.margin-strong {
@@ -1510,7 +1476,6 @@
       .header-actions,
       .action-bar,
       .no-print,
-      .comparison-bridge,
       .composition-section,
       .info-tip::after,
       .info-tip::before {
@@ -2185,7 +2150,7 @@
         <div class="gap-text">
           <div class="gap-text-label" data-i18n="gapLabelDiff">Difference per unit / month</div>
           <div class="gap-text-value" id="gapValue">€ —</div>
-          <div class="gap-text-detail" id="gapDetail" data-i18n="gapDetailDefault">What the average hides about this unit</div>
+          <div class="gap-text-detail" id="gapDetail" data-i18n="gapDetailDefault">What comparing two unit types reveals</div>
         </div>
         <div class="gap-text" style="text-align: right;">
           <div class="gap-text-label" data-i18n="gapLabelAnnual">Annualised</div>
@@ -2197,7 +2162,7 @@
       <ul class="insight-list" id="insightList">
         <li>
           <span class="insight-icon info">i</span>
-          <span data-i18n="insightPlaceholder">Enter values above to see what per-unit analysis reveals beyond the portfolio average.</span>
+          <span data-i18n="insightPlaceholder">Enter values above to see what comparing two unit types reveals.</span>
         </li>
       </ul>
     </div>
@@ -2233,6 +2198,7 @@
         <span style="color: var(--accent);">📊</span>
         <span data-i18n="breakdownTitle">Cost-by-Cost Breakdown</span>
       </div>
+      <p class="sec-desc" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:4px;" data-i18n="breakdownDesc">The exact figures behind the chart and the summary above, line by line, in real currency.</p>
 
       <div class="breakdown-table-wrap">
       <table class="breakdown-table">
@@ -2501,8 +2467,9 @@
         gapDetailDefault: 'What comparing two unit types reveals',
         gapLabelAnnual: 'Annualised',
         gapDetailAnnual: '12-month projection of this difference',
-        insightPlaceholder: 'Enter values above to see what per-unit analysis reveals beyond the portfolio average.',
+        insightPlaceholder: 'Enter values above to see what comparing two unit types reveals.',
         breakdownTitle: 'Cost-by-Cost Breakdown',
+        breakdownDesc: 'The exact figures behind the chart and the summary above, line by line, in real currency.',
         thLineItem: 'Line item',
         thPortfolioAvg: 'Portfolio avg',
         thDifference: 'Difference',
@@ -2639,11 +2606,12 @@
         ariaCompUnitB: 'Grafico composizione costi Unità B',
         insightTitle: 'Perché la visibilità per unità conta',
         gapLabelDiff: 'Differenza per unità / mese',
-        gapDetailDefault: 'Ciò che la media nasconde su questa unità',
+        gapDetailDefault: 'Ciò che il confronto tra due tipi di unità rivela',
         gapLabelAnnual: 'Annualizzata',
         gapDetailAnnual: 'Proiezione a 12 mesi di questa differenza',
-        insightPlaceholder: 'Inserisci i valori sopra per vedere cosa rivela l\'analisi per unità oltre la media di portafoglio.',
+        insightPlaceholder: 'Inserisci i valori sopra per vedere cosa rivela il confronto tra due tipi di unità.',
         breakdownTitle: 'Ripartizione costo per costo',
+        breakdownDesc: 'I numeri esatti dietro al grafico e al riepilogo sopra, voce per voce, in valuta reale.',
         thLineItem: 'Voce',
         thPortfolioAvg: 'Media portafoglio',
         thDifference: 'Differenza',
@@ -2780,11 +2748,12 @@
         ariaCompUnitB: 'Diagramm Kostenzusammensetzung Unit B',
         insightTitle: 'Warum Sichtbarkeit pro Unit wichtig ist',
         gapLabelDiff: 'Differenz pro Unit / Monat',
-        gapDetailDefault: 'Was der Durchschnitt bei dieser Unit verbirgt',
+        gapDetailDefault: 'Was der Vergleich zweier Objekttypen zeigt',
         gapLabelAnnual: 'Annualisiert',
         gapDetailAnnual: '12-Monats-Projektion dieser Differenz',
-        insightPlaceholder: 'Geben Sie oben Werte ein, um zu sehen, was die Analyse pro Unit über den Portfolio-Durchschnitt hinaus zeigt.',
+        insightPlaceholder: 'Geben Sie oben Werte ein, um zu sehen, was der Vergleich zweier Objekttypen zeigt.',
         breakdownTitle: 'Kosten-für-Kosten-Aufschlüsselung',
+        breakdownDesc: 'Die genauen Zahlen hinter der Grafik und der Zusammenfassung oben, Zeile für Zeile, in echter Währung.',
         thLineItem: 'Posten',
         thPortfolioAvg: 'Portfolio-Durchschnitt',
         thDifference: 'Differenz',
