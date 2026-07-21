@@ -370,6 +370,13 @@
       font-size: 14px;
     }
 
+    .property-type-hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 4px 0 8px;
+    }
+
     .comparison-bridge {
       display: flex;
       flex-direction: column;
@@ -1716,7 +1723,7 @@
             <span class="card-icon">🔭</span>
             <span data-i18n="cardPortfolioTitle">Portfolio Birdview</span>
           </div>
-          <span class="card-badge portfolio" data-i18n="badgeAverage">Average</span>
+          <span class="card-badge portfolio" data-i18n="badgeAverage">Totals</span>
         </div>
 
         <div class="section">
@@ -1766,6 +1773,7 @@
             <span class="section-label-accent" style="background: var(--unit);"></span>
             <span data-i18n="lblPropertyType">Property type</span>
           </div>
+          <p class="property-type-hint" data-i18n="propertyTypeHint">Unit A and Unit B start with two contrasting property types, so you can see a real margin gap immediately. Change either to load different example figures, or edit any field directly with your own numbers.</p>
           <select id="a_propertyType" class="property-type-select" onchange="applyPropertyPreset('a', this.value)">
             <option value="studio" data-i18n="propStudio">Studio</option>
             <option value="1br" selected data-i18n="prop1br">1-bedroom</option>
@@ -1799,7 +1807,7 @@
           <div class="input-group">
             <label for="a_ownerType">
               <span data-i18n="lblAgreementTypeU">This unit's agreement type</span>
-              <span class="info-tip" data-i18n-tip="tipOwnerTypeU" data-tip="Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.">i</span>
+              <span class="info-tip" data-i18n-tip="tipOwnerTypeU" data-tip="Each unit type may have a different owner agreement. Compare Unit A and Unit B to see how agreement terms affect margin.">i</span>
             </label>
             <select id="a_ownerType" class="no-prefix" onchange="updateOwnerInput('a')">
               <option value="revShare" data-i18n="optRevShare">Revenue share (%)</option>
@@ -2005,7 +2013,7 @@
           <div class="input-group">
             <label for="b_ownerType">
               <span data-i18n="lblAgreementTypeU">This unit's agreement type</span>
-              <span class="info-tip" data-i18n-tip="tipOwnerTypeU" data-tip="Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.">i</span>
+              <span class="info-tip" data-i18n-tip="tipOwnerTypeU" data-tip="Each unit type may have a different owner agreement. Compare Unit A and Unit B to see how agreement terms affect margin.">i</span>
             </label>
             <select id="b_ownerType" class="no-prefix" onchange="updateOwnerInput('b')">
               <option value="revShare" data-i18n="optRevShare">Revenue share (%)</option>
@@ -2363,9 +2371,18 @@
       villa:   { revenue: 6500, otaShare: 40, otaCommission: 15, directCostPct: 15, ownerType: 'fixedRent', ownerValue: 3200, cleaning: 320, taxes: 220 }
     };
 
-    function applyPropertyPreset(prefix, type) {
+    const lastPropertyType = { a: '1br', b: 'villa' };
+
+    function applyPropertyPreset(prefix, type, skipConfirm) {
       const p = PROPERTY_PRESETS[type];
       if (!p) return;
+      if (!skipConfirm) {
+        const confirmMsg = t('propertyPresetConfirm');
+        if (!window.confirm(confirmMsg)) {
+          document.getElementById(`${prefix}_propertyType`).value = lastPropertyType[prefix] || type;
+          return;
+        }
+      }
       document.getElementById(`${prefix}_propertyType`).value = type;
       document.getElementById(`${prefix}_revenue`).value = p.revenue;
       document.getElementById(`${prefix}_otaShare`).value = p.otaShare;
@@ -2375,6 +2392,7 @@
       document.getElementById(`${prefix}_ownerValue`).value = p.ownerValue;
       document.getElementById(`${prefix}_cleaning`).value = p.cleaning;
       document.getElementById(`${prefix}_taxes`).value = p.taxes;
+      lastPropertyType[prefix] = type;
       updateOwnerInput(prefix);
       calculate();
     }
@@ -2409,7 +2427,7 @@
         heroTitle: 'Portfolio averages hide what unit-level analysis reveals.',
         heroSubtitle: 'Most operators look at portfolio averages and assume each unit contributes equally. They never do. This tool shows what becomes visible when you analyse a single unit in detail and compare it to your portfolio birdview. The point is not to judge the unit. It is to understand what your tech stack should be revealing automatically, every month, across every unit you operate.',
         cardPortfolioTitle: 'Portfolio Birdview',
-        badgeAverage: 'Average',
+        badgeAverage: 'Totals',
         secPortfolioSimple: 'Portfolio totals',
         lblTotalRevenue: 'Total revenue / month',
         lblTotalCosts: 'Total costs / month',
@@ -2420,13 +2438,15 @@
         prop1br: '1-bedroom',
         prop2br: '2-bedroom',
         propVilla: 'Villa',
+        propertyTypeHint: 'Unit A and Unit B start with two contrasting property types, so you can see a real margin gap immediately. Change either to load different example figures, or edit any field directly with your own numbers.',
+        propertyPresetConfirm: 'This will replace the numbers currently entered for this unit with example figures for the selected property type. Continue?',
         secRevenue: 'Revenue',
         lblUnitsInPortfolio: 'Units in portfolio',
         lblAvgRevenuePerUnit: 'Avg monthly revenue / unit',
         secOwnerAgreement: 'Owner Agreement',
         lblAgreementTypeP: 'Most common agreement type',
         tipOwnerTypeP: 'Revenue share: owner gets % of net revenue. Fixed rent: owner gets fixed monthly amount. Management fee: you keep the property revenue and pay owner a fee.',
-        tipOwnerTypeU: 'Each unit may have a different owner agreement. Compare to portfolio norm to spot outliers.',
+        tipOwnerTypeU: 'Each unit type may have a different owner agreement. Compare Unit A and Unit B to see how agreement terms affect margin.',
         optRevShare: 'Revenue share (%)',
         optFixedRent: 'Fixed monthly rent (€)',
         optMgmtFee: 'Management fee (% to operator)',
@@ -2548,7 +2568,7 @@
         heroTitle: 'Le medie di portafoglio nascondono ciò che rivela l\'analisi a livello di unità.',
         heroSubtitle: 'La maggior parte degli operatori guarda le medie di portafoglio e presume che ogni unità contribuisca allo stesso modo. Non è mai così. Questo strumento mostra cosa diventa visibile quando analizzi una singola unità nel dettaglio e la confronti con la tua vista d\'insieme del portafoglio. Il punto non è giudicare l\'unità, ma capire cosa il tuo tech stack dovrebbe rivelare automaticamente, ogni mese, per ogni unità che gestisci.',
         cardPortfolioTitle: 'Vista d\'insieme del portafoglio',
-        badgeAverage: 'Media',
+        badgeAverage: 'Totali',
         secPortfolioSimple: 'Totali di portafoglio',
         lblTotalRevenue: 'Ricavo totale / mese',
         lblTotalCosts: 'Costi totali / mese',
@@ -2559,13 +2579,15 @@
         prop1br: 'Bilocale',
         prop2br: 'Trilocale',
         propVilla: 'Villa',
+        propertyTypeHint: 'Unità A e Unità B partono con due tipi di proprietà contrastanti, così puoi vedere subito un vero divario di margine. Cambia uno dei due per caricare valori di esempio diversi, oppure modifica direttamente qualsiasi campo con i tuoi numeri.',
+        propertyPresetConfirm: 'Questo sostituirà i numeri attualmente inseriti per questa unità con valori di esempio per il tipo di proprietà selezionato. Continuare?',
         secRevenue: 'Ricavi',
         lblUnitsInPortfolio: 'Unità nel portafoglio',
         lblAvgRevenuePerUnit: 'Ricavo medio mensile / unità',
         secOwnerAgreement: 'Accordo con il proprietario',
         lblAgreementTypeP: 'Tipo di accordo più comune',
         tipOwnerTypeP: 'Revenue share: il proprietario riceve una % del ricavo netto. Affitto fisso: il proprietario riceve un importo mensile fisso. Management fee: tieni il ricavo della struttura e paghi una fee al proprietario.',
-        tipOwnerTypeU: 'Ogni unità può avere un accordo diverso con il proprietario. Confronta con la norma di portafoglio per individuare le anomalie.',
+        tipOwnerTypeU: 'Ogni tipo di unità può avere un accordo diverso con il proprietario. Confronta Unità A e Unità B per vedere come i termini dell\'accordo influenzano il margine.',
         optRevShare: 'Revenue share (%)',
         optFixedRent: 'Affitto mensile fisso (€)',
         optMgmtFee: 'Management fee (% all\'operatore)',
@@ -2687,7 +2709,7 @@
         heroTitle: 'Portfolio-Durchschnitte verbergen, was die Analyse auf Unit-Ebene zeigt.',
         heroSubtitle: 'Die meisten Betreiber schauen auf Portfolio-Durchschnitte und nehmen an, dass jede Unit gleich viel beiträgt. Das stimmt nie. Dieses Tool zeigt, was sichtbar wird, wenn Sie eine einzelne Unit im Detail analysieren und mit Ihrer Portfolio-Übersicht vergleichen. Es geht nicht darum, die Unit zu bewerten. Es geht darum zu verstehen, was Ihr Tech-Stack automatisch aufzeigen sollte, jeden Monat, für jede Unit, die Sie betreiben.',
         cardPortfolioTitle: 'Portfolio-Übersicht',
-        badgeAverage: 'Durchschnitt',
+        badgeAverage: 'Summen',
         secPortfolioSimple: 'Portfolio-Gesamtwerte',
         lblTotalRevenue: 'Gesamtumsatz / Monat',
         lblTotalCosts: 'Gesamtkosten / Monat',
@@ -2698,13 +2720,15 @@
         prop1br: '1-Zimmer-Wohnung',
         prop2br: '2-Zimmer-Wohnung',
         propVilla: 'Villa',
+        propertyTypeHint: 'Unit A und Unit B starten mit zwei gegensätzlichen Objekttypen, damit Sie sofort eine echte Margendifferenz sehen. Ändern Sie einen davon, um andere Beispielwerte zu laden, oder bearbeiten Sie jedes Feld direkt mit Ihren eigenen Zahlen.',
+        propertyPresetConfirm: 'Dadurch werden die aktuell eingegebenen Zahlen für diese Unit durch Beispielwerte für den gewählten Objekttyp ersetzt. Fortfahren?',
         secRevenue: 'Umsatz',
         lblUnitsInPortfolio: 'Units im Portfolio',
         lblAvgRevenuePerUnit: 'Durchschn. Monatsumsatz / Unit',
         secOwnerAgreement: 'Eigentümervereinbarung',
         lblAgreementTypeP: 'Häufigster Vereinbarungstyp',
         tipOwnerTypeP: 'Revenue Share: Eigentümer erhält % des Nettoumsatzes. Fixmiete: Eigentümer erhält einen festen Monatsbetrag. Management Fee: Sie behalten den Umsatz und zahlen dem Eigentümer eine Fee.',
-        tipOwnerTypeU: 'Jede Unit kann eine andere Eigentümervereinbarung haben. Vergleichen Sie mit der Portfolio-Norm, um Ausreißer zu erkennen.',
+        tipOwnerTypeU: 'Jeder Objekttyp kann eine andere Eigentümervereinbarung haben. Vergleichen Sie Unit A und Unit B, um zu sehen, wie sich die Vertragsbedingungen auf die Marge auswirken.',
         optRevShare: 'Revenue Share (%)',
         optFixedRent: 'Feste Monatsmiete (€)',
         optMgmtFee: 'Management Fee (% an den Betreiber)',
@@ -3442,10 +3466,14 @@
       initInfoTips();
       const saved = localStorage.getItem('cma-v2-state');
       if (!saved && !window.location.hash) {
-        applyPropertyPreset('a', '1br');
-        applyPropertyPreset('b', 'villa');
+        applyPropertyPreset('a', '1br', true);
+        applyPropertyPreset('b', 'villa', true);
       } else {
-        ['a', 'b'].forEach(prefix => updateOwnerInput(prefix, true));
+        ['a', 'b'].forEach(prefix => {
+          const el = document.getElementById(`${prefix}_propertyType`);
+          if (el) lastPropertyType[prefix] = el.value;
+          updateOwnerInput(prefix, true);
+        });
         calculate();
       }
       
