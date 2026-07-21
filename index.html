@@ -1819,13 +1819,13 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="a_directCostPct">
-                <span data-i18n="lblDirectCostPct">Direct channel cost</span>
-                <span class="info-tip" data-i18n-tip="tipDirectCostPct" data-tip="Auto-filled from your portfolio's direct channel cost rate. Adjust if this unit gets more or less marketing attention than average.">i</span>
+              <label for="a_directCost">
+                <span data-i18n="lblDirectCostPct">Direct channel cost / month</span>
+                <span class="info-tip" data-i18n-tip="tipDirectCostPct" data-tip="Combined cost of winning direct bookings for this unit: booking engine, marketing, and payment processing.">i</span>
               </label>
               <div class="input-wrapper">
-                <input type="number" id="a_directCostPct" value="0" min="0" max="100" step="0.5" class="no-prefix with-suffix">
-                <span class="input-suffix">%</span>
+                <span class="input-prefix">€</span>
+                <input type="number" id="a_directCost" value="0" min="0" step="10">
               </div>
             </div>
           </div>
@@ -2025,13 +2025,13 @@
 
           <div class="input-group-row">
             <div class="input-group">
-              <label for="b_directCostPct">
-                <span data-i18n="lblDirectCostPct">Direct channel cost</span>
-                <span class="info-tip" data-i18n-tip="tipDirectCostPct" data-tip="Auto-filled from your portfolio's direct channel cost rate. Adjust if this unit gets more or less marketing attention than average.">i</span>
+              <label for="b_directCost">
+                <span data-i18n="lblDirectCostPct">Direct channel cost / month</span>
+                <span class="info-tip" data-i18n-tip="tipDirectCostPct" data-tip="Combined cost of winning direct bookings for this unit: booking engine, marketing, and payment processing.">i</span>
               </label>
               <div class="input-wrapper">
-                <input type="number" id="b_directCostPct" value="0" min="0" max="100" step="0.5" class="no-prefix with-suffix">
-                <span class="input-suffix">%</span>
+                <span class="input-prefix">€</span>
+                <input type="number" id="b_directCost" value="0" min="0" step="10">
               </div>
             </div>
           </div>
@@ -2331,10 +2331,10 @@
     let currentLang = 'en';
 
     const PROPERTY_PRESETS = {
-      studio:  { revenue: 1800, otaShare: 65, otaCommission: 18, directCostPct: 8,  ownerType: 'fixedRent', ownerValue: 900,  cleaning: 90,  taxes: 60 },
-      '1br':   { revenue: 2600, otaShare: 60, otaCommission: 18, directCostPct: 10, ownerType: 'fixedRent', ownerValue: 1300, cleaning: 130, taxes: 90 },
-      '2br':   { revenue: 3800, otaShare: 55, otaCommission: 17, directCostPct: 12, ownerType: 'fixedRent', ownerValue: 1900, cleaning: 190, taxes: 130 },
-      villa:   { revenue: 6500, otaShare: 40, otaCommission: 15, directCostPct: 15, ownerType: 'fixedRent', ownerValue: 3200, cleaning: 320, taxes: 220 }
+      studio:  { revenue: 1800, otaShare: 65, otaCommission: 18, directCost: 40,  ownerType: 'fixedRent', ownerValue: 900,  cleaning: 90,  taxes: 60 },
+      '1br':   { revenue: 2600, otaShare: 60, otaCommission: 18, directCost: 70,  ownerType: 'fixedRent', ownerValue: 1300, cleaning: 130, taxes: 90 },
+      '2br':   { revenue: 3800, otaShare: 55, otaCommission: 17, directCost: 110, ownerType: 'fixedRent', ownerValue: 1900, cleaning: 190, taxes: 130 },
+      villa:   { revenue: 6500, otaShare: 40, otaCommission: 15, directCost: 250, ownerType: 'fixedRent', ownerValue: 3200, cleaning: 320, taxes: 220 }
     };
 
     const lastPropertyType = { a: '1br', b: 'villa' };
@@ -2353,7 +2353,7 @@
       document.getElementById(`${prefix}_revenue`).value = p.revenue;
       document.getElementById(`${prefix}_otaShare`).value = p.otaShare;
       document.getElementById(`${prefix}_otaCommission`).value = p.otaCommission;
-      document.getElementById(`${prefix}_directCostPct`).value = p.directCostPct;
+      document.getElementById(`${prefix}_directCost`).value = p.directCost;
       document.getElementById(`${prefix}_ownerType`).value = p.ownerType;
       document.getElementById(`${prefix}_ownerValue`).value = p.ownerValue;
       document.getElementById(`${prefix}_cleaning`).value = p.cleaning;
@@ -2454,8 +2454,8 @@
         lblAgreementTypeU: 'This unit\'s agreement type',
         secDirectCostsU: 'Channel Costs (this unit, monthly)',
         secOperatingCostsU: 'Operating Costs (this unit, monthly)',
-        lblDirectCostPct: 'Direct channel cost',
-        tipDirectCostPct: 'Cost of winning direct bookings as a % of direct revenue: booking engine, marketing, and payment processing.',
+        lblDirectCostPct: 'Direct channel cost / month',
+        tipDirectCostPct: 'Combined cost of winning direct bookings for this unit: booking engine, marketing, and payment processing.',
         resultLabelUnit: 'This unit\'s monthly margin',
         compTitle: 'Cost Composition',
         compDesc: 'Same revenue, different cost layers: this is what portfolio averages flatten out.',
@@ -2597,8 +2597,8 @@
         lblAgreementTypeU: 'Tipo di accordo di questa unità',
         secDirectCostsU: 'Costi di canale (questa unità, mensile)',
         secOperatingCostsU: 'Costi operativi (questa unità, mensile)',
-        lblDirectCostPct: 'Costo canale diretto',
-        tipDirectCostPct: 'Costo per vincere prenotazioni dirette come % del ricavo diretto: motore di prenotazione, marketing ed elaborazione pagamenti.',
+        lblDirectCostPct: 'Costo canale diretto / mese',
+        tipDirectCostPct: 'Costo combinato per generare prenotazioni dirette per questa unità: booking engine, marketing ed elaborazione pagamenti.',
         resultLabelUnit: 'Margine mensile di questa unità',
         compTitle: 'Composizione dei costi',
         compDesc: 'Stesso ricavo, livelli di costo diversi: questo è ciò che le medie di portafoglio appiattiscono.',
@@ -2740,8 +2740,8 @@
         lblAgreementTypeU: 'Vereinbarungstyp dieser Unit',
         secDirectCostsU: 'Kanalkosten (diese Unit, monatlich)',
         secOperatingCostsU: 'Betriebskosten (diese Unit, monatlich)',
-        lblDirectCostPct: 'Direktkanal-Kosten',
-        tipDirectCostPct: 'Kosten für Direktbuchungen als % des Direktumsatzes: Buchungsmaschine, Marketing und Zahlungsabwicklung.',
+        lblDirectCostPct: 'Direktkanal-Kosten / Monat',
+        tipDirectCostPct: 'Kombinierte Kosten für Direktbuchungen dieser Unit: Buchungsmaschine, Marketing und Zahlungsabwicklung.',
         resultLabelUnit: 'Monatliche Marge dieser Unit',
         compTitle: 'Kostenzusammensetzung',
         compDesc: 'Gleicher Umsatz, unterschiedliche Kostenebenen: Das ist es, was Portfolio-Durchschnitte einebnen.',
@@ -2949,7 +2949,7 @@
         ownerValue: parseFloat(document.getElementById(`${prefix}_ownerValue`).value) || 0,
         otaShare: parseFloat(document.getElementById(`${prefix}_otaShare`).value) || 0,
         otaCommission: parseFloat(document.getElementById(`${prefix}_otaCommission`).value) || 0,
-        directCostPct: parseFloat(document.getElementById(`${prefix}_directCostPct`).value) || 0,
+        directCostAmount: parseFloat(document.getElementById(`${prefix}_directCost`).value) || 0,
         cleaning: parseFloat(document.getElementById(`${prefix}_cleaning`).value) || 0,
         taxes: parseFloat(document.getElementById(`${prefix}_taxes`).value) || 0,
         utilities: parseFloat(document.getElementById(`${prefix}_utilities`).value) || 0,
@@ -2982,7 +2982,7 @@
       const otaRevenue = i.revenue * (i.otaShare / 100);
       const otaCommissionAmount = otaRevenue * (i.otaCommission / 100);
       const directRevenue = i.revenue - otaRevenue;
-      const directCostAmount = directRevenue * (i.directCostPct / 100);
+      const directCostAmount = i.directCostAmount;
       
       const netRevenue = i.revenue - otaCommissionAmount - directCostAmount;
       
