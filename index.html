@@ -346,14 +346,14 @@
     }
 
     .comparison-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      align-items: flex-start;
+      align-items: stretch;
     }
 
     .comparison-grid .card {
-      flex: 1 1 320px;
+      min-width: 0;
     }
 
     .property-type-select {
@@ -374,8 +374,8 @@
     }
 
     @media (max-width: 900px) {
-      .comparison-grid .card {
-        flex: 1 1 100%;
+      .comparison-grid {
+        grid-template-columns: 1fr;
       }
 
       .card-portfolio {
@@ -412,7 +412,6 @@
       position: relative;
       background: linear-gradient(180deg, #FAFAFC 0%, var(--card) 100%);
       opacity: 0.97;
-      align-self: stretch;
       display: flex;
       flex-direction: column;
     }
