@@ -354,6 +354,8 @@
 
     .comparison-grid .card {
       min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .property-type-select {
@@ -412,8 +414,6 @@
       position: relative;
       background: linear-gradient(180deg, #FAFAFC 0%, var(--card) 100%);
       opacity: 0.97;
-      display: flex;
-      flex-direction: column;
     }
 
     .card-portfolio::before {
@@ -761,14 +761,13 @@
       color: white;
       padding: 24px 20px;
       border-radius: var(--radius-md);
-      margin-top: 24px;
+      margin-top: auto;
       text-align: center;
       transition: transform 0.35s var(--ease-out);
     }
 
     .result-highlight.portfolio {
       background: linear-gradient(135deg, #6B7B8C 0%, #4A5568 55%, #3D4A57 100%);
-      margin-top: auto;
     }
 
     .result-highlight.margin-strong {
