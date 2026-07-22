@@ -2297,7 +2297,7 @@
          ACTIONS
          ============================================================ -->
     <div class="action-bar no-print">
-      <button class="btn btn-primary" onclick="calculate(); trackMarginCompletion();" type="button" data-i18n="actRecalculate">Recalculate</button>
+      <button class="btn btn-primary" onclick="calculate()" type="button" data-i18n="actRecalculate">Recalculate</button>
       <button class="btn" onclick="exportResults()" type="button" data-i18n="actCopySummary">Copy Summary</button>
       <button class="btn" onclick="window.print()" type="button" data-i18n="actPrint">Print / PDF</button>
     </div>
@@ -3038,6 +3038,7 @@
       updateBreakdownCards(aResult, bResult);
 
       saveState();
+      trackMarginCompletion();
     }
 
     function updatePortfolioHighlight(r) {
@@ -3475,11 +3476,17 @@
       applyLang(window.__oisInitialLang || 'en');
     });
 
+    let marginCompletionTracked = false;
     function trackMarginCompletion() {
+      if (marginCompletionTracked) return;
+      const aTypeEl = document.getElementById('a_propertyType');
+      const bTypeEl = document.getElementById('b_propertyType');
+      if (!aTypeEl || !bTypeEl || !aTypeEl.value || !bTypeEl.value) return;
       if (typeof gtag === 'function') {
+        marginCompletionTracked = true;
         gtag('event', 'contribution_margin_completed', {
-          unit_a_type: document.getElementById('a_propertyType') ? document.getElementById('a_propertyType').value : '',
-          unit_b_type: document.getElementById('b_propertyType') ? document.getElementById('b_propertyType').value : ''
+          unit_a_type: aTypeEl.value,
+          unit_b_type: bTypeEl.value
         });
       }
     }
